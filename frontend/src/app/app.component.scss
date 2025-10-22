@@ -22,3 +22,12 @@ h1 {
     margin-bottom: 30px;
     font-weight: 300; // Makes the title feel modern and light
 }
+
+
+
+.content-container {
+    max-width: 1200px; /* Limit main content width */
+    margin: 0 auto;
+    padding: 20px 20px;
+    min-height: calc(100vh - 100px); /* Ensure footer stays at the bottom on short pages */
+}

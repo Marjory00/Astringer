@@ -3,8 +3,8 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-// V--- NEW: Import the provider for Reactive Forms V
-import { provideReactiveFormsModule } from '@angular/forms';
+// V--- FIX 1: REMOVE the problematic import V
+// import { provideForms } from '@angular/forms';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
 
-    // V--- NEW: Add Reactive Forms Provider V
-    provideReactiveFormsModule()
+    // V--- FIX 2: REMOVE the problematic provider V
+    // provideForms()
   ]
 };

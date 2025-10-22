@@ -2,22 +2,25 @@
 
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common'; // Correctly imported for NgIf, NgFor, etc.
+import { HeaderComponent } from './header/header.component'; // <-- NEW IMPORT
+import { FooterComponent } from './footer/footer.component'; // <-- NEW IMPORT
 
 @Component({
-  selector: 'app-root', // Correctly matches the tag in index.html
-  standalone: true,     // Correctly marked as a standalone component
-  imports: [
-    CommonModule,     // Imports standard Angular directives
-    RouterOutlet      // Correctly enables routing by injecting the child route component
-  ],
+  selector: 'app-root',
+  standalone: true,
+  // Add the new components to imports
+  imports: [RouterOutlet, HeaderComponent, FooterComponent],
   template: `
-    <div class="container">
-      <h1>Astringer Logistics Tracking Dashboard</h1>
-      <router-outlet></router-outlet>  </div>
+    <app-header></app-header>
+
+    <main class="content-container">
+      <router-outlet></router-outlet>
+    </main>
+
+    <app-footer></app-footer>
   `,
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Astringer Logistics'; // Correctly defines a component property
+  title = 'Astringer';
 }
