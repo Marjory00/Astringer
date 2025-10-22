@@ -1,0 +1,113 @@
+/* Astringer/frontend/src/app/dashboard/dashboard.component.scss */
+
+$primary-color: #004d99; // Deep Blue
+$accent-color: #ff9900;  // Logistics Orange
+$delivered-color: #28a745; // Green
+$transit-color: #007bff; // Blue
+$out-for-delivery-color: #ffc107; // Yellow/Orange
+
+.search-box {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    gap: 10px;
+
+    input[type="text"] {
+        padding: 10px 15px;
+        width: 350px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        font-size: 1em;
+        transition: border-color 0.2s;
+
+        &:focus {
+            border-color: $accent-color;
+            outline: none;
+        }
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: $primary-color;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+}
+
+.shipments-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.shipment-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    overflow: hidden;
+
+    a {
+        text-decoration: none;
+        display: block;
+        color: inherit;
+    }
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background-color: #f8f8f8;
+        border-bottom: 1px solid #eee;
+    }
+
+    .id {
+        font-weight: bold;
+        color: $primary-color;
+    }
+
+    .status {
+        padding: 4px 8px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        font-weight: 600;
+        color: white;
+
+        &.status-delivered { background-color: $delivered-color; }
+        &.status-in { background-color: $transit-color; }
+        &.status-out { background-color: $out-for-delivery-color; }
+    }
+
+    .details {
+        padding: 15px;
+
+        p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #555;
+        }
+    }
+}
+
+.no-data {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 30px;
+    color: #888;
+    font-style: italic;
+}
