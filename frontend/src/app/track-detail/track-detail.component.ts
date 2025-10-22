@@ -5,19 +5,19 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { CourierService, Shipment } from '../courier.service';
 import { Observable, switchMap, catchError, of } from 'rxjs';
+import { StatusClassPipe } from '../status-class.pipe'; // <-- NEW IMPORT
 
-// Import tab for side effects
-import { Observable, switchMap, catchError, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-track-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink], // RouterLink is correctly imported for the template
+  imports: [CommonModule, RouterLink, StatusClassPipe], // RouterLink is correctly imported for the template
   templateUrl: './track-detail.component.html',
   styleUrls: ['./track-detail.component.scss']
 })
 export class TrackDetailComponent implements OnInit {
   shipment$!: Observable<Shipment | undefined>;
+notFound: TemplateRef<NgIfContext<Shipment|null|undefined>>|null;
 
   constructor(
     private route: ActivatedRoute,

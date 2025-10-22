@@ -7,15 +7,18 @@ import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { CourierService, Shipment } from '../courier.service';
 import { Observable, finalize } from 'rxjs';
+import { StatusClassPipe } from '../status-class.pipe'; // <-- NEW IMPORT
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  // FIX: Clean imports. Only ReactiveFormsModule is needed for the form.
+  // FIX: Clean imports. Removed the erroneous comma and period.
   imports: [
     CommonModule,
-    ReactiveFormsModule
-],
+    ReactiveFormsModule,
+    RouterLink,  // <-- CORRECTED SYNTAX
+    StatusClassPipe
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

@@ -1,9 +1,24 @@
-<div class="loading-container" *ngIf="isLoading">
-  <div class="spinner"></div>
-  <p>Fetching active shipments...</p>
-</div>
-
 <div class="shipments-grid" *ngIf="!isLoading">
   <ng-container *ngIf="shipments$ | async as shipments">
-    </ng-container>
+
+    <div class="shipment-card" *ngFor="let shipment of shipments">
+
+      <a [routerLink]="['/track', shipment.id]">
+
+        <div class="header">
+          <span class="id">ID: {{ shipment.id }}</span>
+          <span class="status status-{{ shipment.status | statusClass }}">
+            {{ shipment.status }}
+          </span>
+        </div>
+
+        <div class="details">
+          <p><strong>Current Location:</strong> {{ shipment.location }}</p>
+          <p><strong>Estimated Delivery:</strong> {{ shipment.estimatedDelivery }}</p>
+        </div>
+
+      </a> </div> <div *ngIf="shipments.length === 0" class="no-data">
+        No active shipments found.
+    </div>
+  </ng-container>
 </div>
