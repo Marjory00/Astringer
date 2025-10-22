@@ -1,22 +1,21 @@
 // Astringer/frontend/src/app/dashboard/dashboard.component.ts
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core'; // <-- RESTORED: ViewChild, ElementRef
 import { CommonModule } from '@angular/common';
-// FIX: Removed redundant 'FormsModule'. Retained Reactive Forms modules.
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CourierService, Shipment } from '../courier.service';
-import { Observable, finalize } from 'rxjs';
-import { StatusClassPipe } from '../status-class.pipe'; // <-- NEW IMPORT
+// FIX: Imported catchError and of for robust error handling
+import { Observable, finalize, catchError, of } from 'rxjs';
+import { StatusClassPipe } from '../status-class.pipe';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  // FIX: Clean imports. Removed the erroneous comma and period.
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,  // <-- CORRECTED SYNTAX
+    RouterLink,
     StatusClassPipe
   ],
   templateUrl: './dashboard.component.html',
@@ -26,10 +25,14 @@ export class DashboardComponent implements OnInit {
   shipments$!: Observable<Shipment[]>;
   isLoading: boolean = true;
 
-  // FormGroup is correctly defined and will be initialized in ngOnInit
+  // RESTORED: Property to hold network error message
+  apiError: string | null = null;
+
+  // RESTORED: Get a reference to the input element in the template
+  @ViewChild('trackingInput') trackingInput!: ElementRef;
+
   trackingForm!: FormGroup;
 
-  // FormBuilder is correctly injected
   constructor(
     private courierService: CourierService,
     private router: Router,
@@ -37,7 +40,6 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Form initialization is correct with required and pattern validators
     this.trackingForm = this.fb.group({
       trackingId: ['', [
         Validators.required,
@@ -45,30 +47,39 @@ export class DashboardComponent implements OnInit {
       ]]
     });
 
-    // Loading state logic using finalize is correct
+    this.isLoading = true;
+    this.apiError = null; // Clear previous errors
+
+    // FIX: Added catchError for global API failure handling
     this.shipments$ = this.courierService.getAllShipments().pipe(
       finalize(() => {
         this.isLoading = false;
+      }),
+      catchError(err => {
+        console.error('API Connection Error:', err);
+        this.apiError = 'Could not connect to the logistics server. Please ensure the backend is running.';
+        // Return an observable of an empty array so the stream completes gracefully
+        return of([]);
       })
     );
   }
 
-  // searchTrackingId logic is correct: checks validity before navigating
   searchTrackingId() {
     if (this.trackingForm.valid) {
       const id = this.trackingForm.value.trackingId.trim().toUpperCase();
       this.router.navigate(['/track', id]);
-
-      // Resets the form after successful submission
       this.trackingForm.reset();
     } else {
-      // Correctly marks the control as touched to trigger error messages in HTML
       this.trackingForm.get('trackingId')?.markAsTouched();
       console.warn('Invalid Tracking ID entered.');
+
+      // FIX: Focus the input field on validation error for accessibility
+      if (this.trackingInput) {
+        this.trackingInput.nativeElement.focus();
+      }
     }
   }
 
-  // Helper getter is correct for clean template access
   get trackingIdControl() {
     return this.trackingForm.get('trackingId');
   }

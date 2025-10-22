@@ -1,10 +1,16 @@
 /* Astringer/frontend/src/app/dashboard/dashboard.component.scss */
 
-$primary-color: #004d99; // Deep Blue
-$accent-color: #ff9900;  // Logistics Orange
-$delivered-color: #28a745; // Green
-$transit-color: #007bff; // Blue
-$out-for-delivery-color: #ffc107; // Yellow/Orange
+$primary-color: #004d99; // Deep Blue; // <-- FIX: Ensure semicolon is present
+$accent-color: #ff9900;  // Logistics Orange; // <-- FIX: Ensure semicolon is present
+$delivered-color: #28a745; // Green; // <-- FIX: Ensure semicolon is present
+$transit-color: #007bff; // Blue; // <-- FIX: Ensure semicolon is present
+$out-for-delivery-color: #ffc107; // Yellow/Orange; // <-- FIX: Ensure semicolon is present
+$error-color: #cc0000; // Standard red for validation; // <-- FIX: Ensure semicolon is present
+
+
+/* =========================================================
+   1. Search Box and Reactive Forms Validation
+   ========================================================= */
 
 .search-box {
     display: flex;
@@ -26,6 +32,17 @@ $out-for-delivery-color: #ffc107; // Yellow/Orange
         }
     }
 
+    /* V--- NEW: Style for invalid input V */
+    input[type="text"].ng-invalid.ng-touched {
+        border-color: $error-color;
+    }
+
+    /* V--- NEW: Style for disabled button V */
+    button:disabled {
+        background-color: lighten($primary-color, 20%);
+        cursor: not-allowed;
+    }
+
     button {
         padding: 10px 20px;
         background-color: $primary-color;
@@ -41,6 +58,42 @@ $out-for-delivery-color: #ffc107; // Yellow/Orange
         }
     }
 }
+
+/* V--- NEW: Validation Error Styles V */
+.validation-error {
+    text-align: center;
+    margin-top: -30px; /* Pull it up below the input */
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: $error-color;
+    font-weight: 500;
+}
+
+.validation-error p {
+    margin: 3px 0;
+}
+
+/* =========================================================
+   2. API Error Banner
+   ========================================================= */
+
+.api-error {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    border: 2px solid #dc3545; /* Red border */
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Darker red text */
+    border-radius: 5px;
+}
+
+.api-error p {
+    margin: 5px 0;
+}
+
+/* =========================================================
+   3. Shipments Grid Layout
+   ========================================================= */
 
 .shipments-grid {
     display: grid;
@@ -110,4 +163,33 @@ $out-for-delivery-color: #ffc107; // Yellow/Orange
     padding: 30px;
     color: #888;
     font-style: italic;
+}
+
+/* =========================================================
+   4. Loading Spinner
+   ========================================================= */
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    color: #555;
+    grid-column: 1 / -1; /* Center across the entire grid area */
+}
+
+.spinner {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid $primary-color; /* Blue spinner */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
