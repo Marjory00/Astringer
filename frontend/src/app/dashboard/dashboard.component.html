@@ -1,1 +1,9 @@
-<p>dashboard works!</p>
+<div class="loading-container" *ngIf="isLoading">
+  <div class="spinner"></div>
+  <p>Fetching active shipments...</p>
+</div>
+
+<div class="shipments-grid" *ngIf="!isLoading">
+  <ng-container *ngIf="shipments$ | async as shipments">
+    </ng-container>
+</div>

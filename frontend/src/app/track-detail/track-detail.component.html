@@ -1,49 +1,13 @@
 <div class="detail-container">
 
   <ng-container *ngIf="shipment$ | async as shipment; else notFound">
-    <div class="tracking-header">
-      <h2>Shipment ID: {{ shipment.id }}</h2>
-      <span class="status status-{{ shipment.status.split(' ')[0] | lowercase }}">
-        {{ shipment.status }}
-      </span>
-    </div>
-
-    <div class="info-block">
-      <h3>Current Status</h3>
-      <p>The parcel is currently at: **{{ shipment.location }}**</p>
-      <p>Expected arrival date: **{{ shipment.estimatedDelivery }}**</p>
-    </div>
-
-    <div class="timeline">
-      <h3>Timeline</h3>
-
-      <div class="timeline-item delivered" *ngIf="shipment.status.includes('Delivered')">
-        <div class="dot"></div>
-        <div class="content">Delivered to final destination. ({{ shipment.estimatedDelivery }})</div>
-      </div>
-
-      <div class="timeline-item out" *ngIf="shipment.status.includes('Out for Delivery') || shipment.status.includes('Delivered')">
-        <div class="dot"></div>
-        <div class="content">Out for delivery in local area.</div>
-      </div>
-
-      <div class="timeline-item transit">
-        <div class="dot"></div>
-        <div class="content">In Transit from sorting facility ({{ shipment.location }}).</div>
-      </div>
-
-      <div class="timeline-item created">
-        <div class="dot"></div>
-        <div class="content">Shipment label created and handed over to courier.</div>
-      </div>
-    </div>
-
-  </ng-container>
+    </ng-container>
 
   <ng-template #notFound>
     <div class="error-message">
       <h2>Tracking ID Not Found 😞</h2>
       <p>The tracking ID entered is invalid or the shipment has not been registered yet.</p>
+      <p>Returning to the dashboard shortly...</p>
     </div>
   </ng-template>
 

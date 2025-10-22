@@ -2,9 +2,12 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { CourierService, Shipment } from '../courier.service';
 import { Observable, switchMap, catchError, of } from 'rxjs';
+
+// Import tab for side effects
+import { Observable, switchMap, catchError, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-track-detail',
@@ -18,7 +21,8 @@ export class TrackDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private courierService: CourierService
+    private courierService: CourierService,
+    private router: Router // <-- Inject Router
   ) { }
 
   ngOnInit() {
@@ -28,9 +32,25 @@ export class TrackDetailComponent implements OnInit {
         // Calls the service method which finds the shipment or returns undefined
         return id ? this.courierService.trackShipment(id) : of(undefined);
       }),
+      // V--- NEW: Intercept the result before it reaches the template V
+      tap(shipment => {
+        // If the service returned undefined (shipment not found)
+        if (shipment === undefined) {
+          // Log a user-friendly message
+          console.warn('Redirecting: Shipment ID not found or invalid.');
+
+          // Redifrect the user back to the dashboard after a short delay
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 1500); // 1.5 second delay so the user sees the "Not Found" message briefly
+          }
+
+      }),
       catchError(err => {
-        // Handles network errors or 404s gracefully
-        console.error('Shipment error:', err);
+        // Log the technical error
+        console.error('Shipment API Error:', err);
+        // Redirect inmediately on a critical network error
+        this.router.navigate(['/']);
         return of(undefined);
       })
     );
