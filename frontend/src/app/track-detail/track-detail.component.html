@@ -32,12 +32,14 @@
         <div class="content">Delivered to final destination. ({{ shipment.estimatedDelivery }})</div>
       </div>
 
-      <div class="timeline-item out" *ngIf="(shipment.status | statusClass) === 'out'">
+      <div class="timeline-item out"
+           *ngIf="(shipment.status | statusClass) === 'out' || (shipment.status | statusClass) === 'delivered'">
         <div class="dot"></div>
         <div class="content">Out for delivery in local area.</div>
       </div>
 
-      <div class="timeline-item transit" *ngIf="(shipment.status | statusClass) === 'in' || (shipment.status | statusClass) === 'out' || (shipment.status | statusClass) === 'delivered'">
+      <div class="timeline-item transit"
+           *ngIf="(shipment.status | statusClass) === 'in' || (shipment.status | statusClass) === 'out' || (shipment.status | statusClass) === 'delivered'">
         <div class="dot"></div>
         <div class="content">In Transit from sorting facility ({{ shipment.location }}).</div>
       </div>

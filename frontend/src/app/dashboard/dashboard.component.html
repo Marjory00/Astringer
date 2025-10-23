@@ -1,25 +1,69 @@
-<div class="shipments-grid" *ngIf="!isLoading">
-  <ng-container *ngIf="shipments$ | async as shipments">
+<div class="main-dashboard-content">
 
-    <div class="shipment-card" *ngFor="let shipment of shipments">
+  <div class="search-box">
+    <form [formGroup]="trackingForm" (ngSubmit)="searchTrackingId()">
 
-      <a [routerLink]="['/track', shipment.id]">
+      <input
+        type="text"
+        placeholder="Enter Tracking ID (e.g., AST123456)"
+        formControlName="trackingId"
+        #trackingInput
+        [class.ng-invalid]="trackingIdControl?.invalid && trackingIdControl?.touched"
+      >
+      <button type="submit" [disabled]="trackingForm.invalid">Track Shipment</button>
+    </form>
+  </div>
 
-        <div class="header">
-          <span class="id">ID: {{ shipment.id }}</span>
-          <span class="status status-{{ shipment.status | statusClass }}">
-            {{ shipment.status }}
-          </span>
-        </div>
+  <ng-container *ngIf="trackingIdControl as control">
 
-        <div class="details">
-          <p><strong>Current Location:</strong> {{ shipment.location }}</p>
-          <p><strong>Estimated Delivery:</strong> {{ shipment.estimatedDelivery }}</p>
-        </div>
+    <div class="validation-error" *ngIf="control.invalid && control.touched">
 
-      </a>
-    </div> <div *ngIf="shipments.length === 0" class="no-data">
-        No active shipments found.
+      <p *ngIf="control.errors && control.errors['required']">Tracking ID is required.</p>
+      <p *ngIf="control.errors && control.errors['pattern']">ID must start with 'AST' followed by 6 digits.</p>
+
     </div>
   </ng-container>
+
+
+  <div *ngIf="apiError" class="api-error">
+    <p>🚨 **Connection Error:**</p>
+    <p>{{ apiError }}</p>
+  </div>
+
+
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading active shipments...</p>
+  </div>
+
+
+  <div class="shipments-grid" *ngIf="!isLoading">
+
+    <ng-container *ngIf="shipments$ | async as shipments">
+
+      <div class="shipment-card" *ngFor="let shipment of shipments">
+        <a [routerLink]="['/track', shipment.id]">
+
+          <div class="header">
+            <span class="id">ID: {{ shipment.id }}</span>
+            <span class="status status-{{ shipment.status | statusClass }}">
+              {{ shipment.status }}
+            </span>
+          </div>
+
+          <div class="details">
+            <p><strong>Current Location:</strong> {{ shipment.location }}</p>
+            <p><strong>Estimated Delivery:</strong> {{ shipment.estimatedDelivery }}</p>
+          </div>
+
+        </a>
+      </div>
+
+      <div *ngIf="shipments.length === 0" class="no-data">
+          No active shipments found.
+      </div>
+
+    </ng-container>
+  </div>
+
 </div>
