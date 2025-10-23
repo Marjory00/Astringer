@@ -1,33 +1,27 @@
-/* Astringer/frontend/src/app/app.component.scss */
+/* Astringer/frontend/src/app/app.component.scss (FINALIZED) */
 
 $primary-color: #004d99; // Deep Blue, used for headers
 
-.container {
-    // Limits the application width for a desktop view
-    max-width: 1000px;
-
-    // Centers the container horizontally
-    margin: 40px auto;
-
-    // Adds padding on the sides for smaller screens
-    padding: 0 20px;
-
-    // Sets a clean, common font for the entire app
+/* V--- NEW: Styles applied directly to the host body (usually via a global style) or the app-root V */
+:host {
+    display: block; // Ensures the host element behaves like a div
+    min-height: 100vh; // Ensures the app root covers the full viewport height
+    background-color: #f4f4f9; // Light background for the whole page
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-h1 {
-    text-align: center;
-    color: $primary-color;
-    margin-bottom: 30px;
-    font-weight: 300; // Makes the title feel modern and light
-}
-
-
-
+// Container for the router-outlet content
 .content-container {
-    max-width: 1200px; /* Limit main content width */
+    // Limits the application width, matching the existing definition
+    max-width: 1200px;
+
+    // Centers the content area
     margin: 0 auto;
+
+    // Adds padding on the sides for smaller screens
     padding: 20px 20px;
-    min-height: calc(100vh - 100px); /* Ensure footer stays at the bottom on short pages */
+
+    // Crucial for pushing the footer to the bottom.
+    // This value is adjusted slightly higher (150px) to account for header/footer heights.
+    min-height: calc(100vh - 150px);
 }
