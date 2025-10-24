@@ -1,7 +1,9 @@
-/* Astringer/frontend/src/app/dashboard/dashboard.component.scss (FINALIZED) */
+/* Astringer/frontend/src/app/dashboard/dashboard.component.scss (FINALIZED & FIXED) */
+
+@use "sass:color"; // FIX: Import the color module for modern color functions
 
 $primary-color: #004d99; // Deep Blue
-$accent-color: #ff9900;  // Logistics Orange
+$accent-color: #ff9900;  // Logistics Orange
 $error-color: #dc3545;
 $delivered-color: #28a745;
 $transit-color: #007bff;
@@ -58,7 +60,8 @@ $out-for-delivery-color: #ffc107;
     transition: background-color 0.2s;
 
     &:hover:not(:disabled) {
-        background-color: darken($primary-color, 8%);
+        // FIX: Replaced deprecated darken() with color.adjust()
+        background-color: color.adjust($primary-color, $lightness: -8%);
     }
 
     &:disabled {
