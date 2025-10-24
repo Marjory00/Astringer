@@ -1,0 +1,30 @@
+<div class="reporting-container">
+  <h1>📊 Logistics Reporting & Analytics</h1>
+  <p class="description">Get real-time insights into key performance indicators and operational efficiency.</p>
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <h3>Total Shipments</h3>
+      <p class="value">{{ metrics.totalShipments }}</p>
+    </div>
+    <div class="metric-card">
+      <h3>On-Time Delivery</h3>
+      <p class="value on-time">{{ metrics.onTimeDelivery }}</p>
+    </div>
+    <div class="metric-card">
+      <h3>Avg. Transit Time</h3>
+      <p class="value">{{ metrics.avgTransitTime }}</p>
+    </div>
+    <div class="metric-card">
+      <h3>Current Warehouse Load</h3>
+      <p class="value load">{{ metrics.currentLoad }}</p>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>Delivery Trend (Last 30 Days)</h2>
+    <div class="chart-placeholder">
+      <p>Data visualization area (e.g., a Chart.js graph would go here)</p>
+    </div>
+  </div>
+</div>

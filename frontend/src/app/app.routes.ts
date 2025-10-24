@@ -1,17 +1,20 @@
-// Astringer/frontend/src/app/app.routes.ts (FINALIZED)
+// src/app/app.routes.ts
 
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TrackDetailComponent } from './track-detail/track-detail.component';
-import { NotFoundComponent } from './not-found/not-found.component'; // <-- NEW IMPORT
+import { PlanningComponent } from './planning/planning.component';
+import { ReportingComponent } from './reporting/reporting.component';
+import { SettingsComponent } from './settings/settings.component';
 
 export const routes: Routes = [
-  // Default route - Dashboard
-  { path: '', component: DashboardComponent, title: 'Astringer - Dashboard' },
-
-  // Dynamic route for tracking a specific shipment
-  { path: 'track/:id', component: TrackDetailComponent, title: 'Astringer - Track Shipment' },
-
-  // Catch-all route (must be the LAST route) - Not Found (404)
-  { path: '**', component: NotFoundComponent, title: 'Astringer - Page Not Found' } // <-- NEW CATCH-ALL
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'track/:id', component: TrackDetailComponent },
+  { path: 'planning', component: PlanningComponent },
+  { path: 'reporting', component: ReportingComponent },
+  { path: 'settings', component: SettingsComponent },
+  // Default redirect
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  // Wildcard for 404/not found (optional)
+  // { path: '**', component: NotFoundComponent }
 ];

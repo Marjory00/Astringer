@@ -1,0 +1,74 @@
+$primary-color: #004d99;
+$accent-color: #ff9900;
+
+.planning-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.description {
+    color: #666;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.shipment-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    .form-group:nth-child(1) {
+        /* Tracking ID spans both columns */
+        grid-column: 1 / -1;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select {
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+        background-color: #f9f9f9;
+    }
+
+    input[readonly] {
+        background-color: #eee;
+        color: #555;
+        font-weight: bold;
+    }
+}
+
+.primary-button {
+    grid-column: 1 / -1;
+    padding: 12px 20px;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: darken($primary-color, 10%); /* Using a placeholder for now */
+    }
+}

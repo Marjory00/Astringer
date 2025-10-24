@@ -1,9 +1,20 @@
-<app-header></app-header>
+<header class="main-header">
+  <nav class="navbar">
+    <div class="logo">Astringer Logistics</div>
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active">🚚 Dashboard</a>
+      <a routerLink="/planning" routerLinkActive="active">📦 New Shipment</a>
+      <a routerLink="/reporting" routerLinkActive="active">📊 Reporting</a>
+      <a routerLink="/settings" routerLinkActive="active">⚙️ Settings</a>
+    </div>
+  </nav>
+</header>
 
-<main class="content-container">
+<main class="content-area">
   <router-outlet></router-outlet>
 </main>
 
-<app-notification></app-notification>
-
-<app-footer></app-footer>
+<footer class="main-footer">
+  <p>&copy; {{ currentYear }} Astringer Courier Logistics. All rights reserved.</p>
+  <p>Version 1.0.0 | <a routerLink="/settings">Privacy Policy</a></p>
+</footer>

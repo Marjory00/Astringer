@@ -1,23 +1,91 @@
-/* Astringer/frontend/src/app/app.component.scss (FINALIZED) */
+/* src/app/app.component.scss */
 
-$primary-color: #004d99;
+$primary-color: #004d99; // Deep Blue
+$accent-color: #ff9900;
+$background-color: #f4f7fa;
 
-/* =========================================================
-   1. Global Layout (Sticky Footer)
-   ========================================================= */
-
-:host {
-    display: flex;             /* Activates Flexbox */
-    flex-direction: column;    /* Stacks children vertically */
-    min-height: 100vh;         /* Ensures the host uses the full viewport height */
-    /* Other styles are moved to global styles.scss */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: $background-color;
+    color: #333;
+    min-height: 100vh;
 }
 
-/* Container for the router-outlet content */
-.content-container {
-    flex: 1;                   /* THE KEY: Forces the main content to GROW and push the footer down */
+/* 1. Header and Navigation */
+.main-header {
+    background-color: $primary-color;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar {
     max-width: 1200px;
-    margin: 0 auto; /* Centers the content area */
-    width: 90%;
-    padding: 20px 20px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+}
+
+.logo {
+    color: white;
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+.nav-links a {
+    color: #c7d2e0;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover,
+    &.active {
+        background-color: darken($primary-color, 5%);
+        color: white;
+    }
+
+    &.active {
+        border-bottom: 3px solid $accent-color;
+        padding-bottom: 7px;
+    }
+}
+
+/* 2. Content Area */
+.content-area {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 30px;
+    flex-grow: 1; /* Allows content to push the footer down */
+}
+
+
+/* 3. Footer Styling */
+.main-footer {
+    background-color: #333; /* Dark background */
+    color: #ccc;
+    padding: 15px 30px;
+    font-size: 0.9em;
+    text-align: center;
+    border-top: 3px solid $accent-color; /* Accent line */
+    margin-top: 50px; /* Space it out from the content */
+
+    p {
+        margin: 5px 0;
+    }
+
+    a {
+        color: $accent-color;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }

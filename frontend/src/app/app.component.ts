@@ -1,36 +1,25 @@
-// Astringer/frontend/src/app/app.component.ts (FINALIZED)
+// src/app/app.component.ts
 
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common'; // Re-add CommonModule for general safety
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { NotificationComponent } from './notification/notification.component';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
+  // Only router directives and CommonModule are needed here now that routing
+  // is configured globally in app.config.ts
   imports: [
     CommonModule,
     RouterOutlet,
-    HeaderComponent,
-    FooterComponent,
-    // FIX: NotificationComponent is now correctly included
-    NotificationComponent
-],
-  template: `
-    <app-header></app-header>
-
-    <main class="content-container">
-        <router-outlet></router-outlet>
-    </main>
-
-    <app-notification></app-notification>
-
-    <app-footer></app-footer>
-`,
-  styleUrls: ['./app.component.scss']
+    RouterLink,
+    RouterLinkActive,
+  ],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'] // Assumes you only use the SCSS file
 })
 export class AppComponent {
-  title = 'Astringer';
+  title = 'Astringer Logistics Dashboard';
+  // FIX: Defines the property for the footer
+  currentYear = new Date().getFullYear();
 }
