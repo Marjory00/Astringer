@@ -5,6 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
 export interface Shipment {
+trackingId: any;
+destination: any;
+origin: any;
   id: string;
   status: string;
   location: string;

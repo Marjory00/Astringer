@@ -15,6 +15,6 @@ export const routes: Routes = [
   { path: 'settings', component: SettingsComponent },
   // Default redirect
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  // Wildcard for 404/not found (optional)
+  // Wildcard for 404/not found
   // { path: '**', component: NotFoundComponent }
 ];

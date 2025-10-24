@@ -1,29 +1,62 @@
-<div class="search-box">
-  <form [formGroup]="trackingForm" (ngSubmit)="searchTrackingId()">
-    <input
-      #trackingInput
-      type="text"
-      formControlName="trackingId"
-      placeholder="Enter Astringer Tracking ID (e.g., AST123456)"
+<div class="dashboard-container">
+  <h1><i class="fas fa-truck"></i> Active Shipments Overview</h1>
 
-      [ngClass]="{'ng-invalid': trackingIdControl?.invalid && trackingIdControl?.touched}"
-    >
-
-    <button type="submit" [disabled]="trackingForm.invalid">Track Shipment</button>
-  </form>
-
-  <div class="validation-error" *ngIf="trackingIdControl?.invalid && trackingIdControl?.touched">
-
-    <p *ngIf="trackingIdControl?.errors?.['required']">Tracking ID is required.</p>
-    <p *ngIf="trackingIdControl?.errors?.['pattern']">ID must start with 'AST' followed by 6 digits.</p>
+  <div *ngIf="isLoading" class="loading-state">
+    <i class="fas fa-spinner fa-spin"></i> Loading active shipments...
   </div>
-</div>
 
-<div *ngIf="apiError" class="api-error">
-  {{ apiError }}
-</div>
+  <div *ngIf="apiError && !isLoading" class="error-state">
+    <i class="fas fa-exclamation-triangle"></i> {{ apiError }}
+  </div>
 
-<div *ngIf="isLoading" class="loading-container">
-  <div class="spinner"></div>
-  Loading active shipments...
+  <ng-container *ngIf="!isLoading && !apiError">
+    <div *ngIf="(shipments$ | async) as shipments; else noData">
+      <div *ngIf="shipments.length > 0; else noData" class="shipments-table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Tracking ID</th>
+              <th>Origin</th>
+              <th>Destination</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let shipment of shipments">
+              <td class="id-link">
+                <a [routerLink]="['/track', shipment.id]">{{ shipment.trackingId }}</a>
+              </td>
+              <td>{{ shipment.origin }}</td>
+              <td>{{ shipment.destination }}</td>
+              <td>
+                <span class="status">
+                  <i class="fas" [ngClass]="getStatusIcon(shipment.status)"></i>
+                  {{ shipment.status }}
+                </span>
+              </td>
+              <td>
+                <a (click)="navigateToTracking(shipment.id)" class="action-btn">
+                  <i class="fas fa-search"></i> Details
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noData>
+    <div class="empty-state">
+      <i class="fas fa-box-open"></i> No active shipments found. Time to plan a new route!
+      <a routerLink="/planning" class="plan-link">Plan New Shipment</a>
+    </div>
+  </ng-template>
+
+  <div *ngIf="!isLoading" class="dashboard-actions">
+    <a routerLink="/planning" class="primary-button">
+      <i class="fas fa-plus-circle"></i> Create New Shipment
+    </a>
+  </div>
 </div>

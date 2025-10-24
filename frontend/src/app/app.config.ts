@@ -1,9 +1,9 @@
 // src/app/app.config.ts
 
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router'; // 👈 Needed for routing
+import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { routes } from './app.routes'; // 👈 Import route definitions
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [

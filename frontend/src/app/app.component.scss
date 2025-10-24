@@ -1,6 +1,6 @@
-/* src/app/app.component.scss */
+/* src/app/app.component.scss (FIXED STICKY FOOTER) */
 
-$primary-color: #004d99; // Deep Blue
+$primary-color: #004d99;
 $accent-color: #ff9900;
 $background-color: #f4f7fa;
 
@@ -9,6 +9,12 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: $background-color;
     color: #333;
+}
+
+// 💥 CRITICAL FIX: Target the host element (<app-root>) for the layout 💥
+:host {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
 }
 
@@ -34,6 +40,14 @@ body {
     color: white;
     font-size: 1.5em;
     font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
 }
 
 .nav-links a {
@@ -44,6 +58,10 @@ body {
     margin-left: 10px;
     border-radius: 4px;
     transition: background-color 0.2s, color 0.2s;
+
+    .fas {
+        margin-right: 5px;
+    }
 
     &:hover,
     &.active {
@@ -62,19 +80,21 @@ body {
     max-width: 1200px;
     margin: 30px auto;
     padding: 0 30px;
-    flex-grow: 1; /* Allows content to push the footer down */
+
+    // CRITICAL FIX: Content area takes up all remaining space
+    flex-grow: 1;
 }
 
 
 /* 3. Footer Styling */
 .main-footer {
-    background-color: #333; /* Dark background */
+    background-color: #333;
     color: #ccc;
     padding: 15px 30px;
     font-size: 0.9em;
     text-align: center;
-    border-top: 3px solid $accent-color; /* Accent line */
-    margin-top: 50px; /* Space it out from the content */
+    border-top: 3px solid $accent-color;
+    margin-top: 50px;
 
     p {
         margin: 5px 0;

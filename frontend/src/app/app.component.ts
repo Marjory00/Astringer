@@ -7,8 +7,6 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-root',
   standalone: true,
-  // Only router directives and CommonModule are needed here now that routing
-  // is configured globally in app.config.ts
   imports: [
     CommonModule,
     RouterOutlet,
@@ -16,10 +14,9 @@ import { CommonModule } from '@angular/common';
     RouterLinkActive,
   ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'] // Assumes you only use the SCSS file
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'Astringer Logistics Dashboard';
-  // FIX: Defines the property for the footer
   currentYear = new Date().getFullYear();
 }

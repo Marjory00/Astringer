@@ -1,11 +1,22 @@
 <header class="main-header">
   <nav class="navbar">
-    <div class="logo">Astringer Logistics</div>
+    <div class="logo">
+      <img src="assets/truck-logo.svg" alt="Astringer Logo" class="logo-icon">
+      Astringer Logistics
+    </div>
     <div class="nav-links">
-      <a routerLink="/dashboard" routerLinkActive="active">🚚 Dashboard</a>
-      <a routerLink="/planning" routerLinkActive="active">📦 New Shipment</a>
-      <a routerLink="/reporting" routerLinkActive="active">📊 Reporting</a>
-      <a routerLink="/settings" routerLinkActive="active">⚙️ Settings</a>
+      <a routerLink="/dashboard" routerLinkActive="active" title="Dashboard">
+        <i class="fas fa-truck"></i> Dashboard
+      </a>
+      <a routerLink="/planning" routerLinkActive="active" title="Plan New Shipment">
+        <i class="fas fa-box-open"></i> New Shipment
+      </a>
+      <a routerLink="/reporting" routerLinkActive="active" title="Reporting">
+        <i class="fas fa-chart-line"></i> Reporting
+      </a>
+      <a routerLink="/settings" routerLinkActive="active" title="Settings">
+        <i class="fas fa-cog"></i> Settings
+      </a>
     </div>
   </nav>
 </header>
