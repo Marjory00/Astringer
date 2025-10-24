@@ -1,0 +1,41 @@
+/* Astringer/frontend/src/app/notification/notification.component.scss (FINALIZED) */
+
+$success-color: #28a745;
+$error-color: #dc3545;
+$info-color: #007bff;
+
+.notification {
+    position: fixed;
+    top: 65px; /* Adjust slightly higher for cleaner placement below header */
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    max-width: 300px; /* Limits the width on large screens */
+
+    /* V--- Initial Hidden State (Fix for smooth transitions) V */
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+
+    /* V--- Active State (Applied when *ngIf renders the element) V */
+    &.ng-star-inserted {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.success {
+    background-color: $success-color;
+}
+
+.error {
+    background-color: $error-color;
+}
+
+.info {
+    background-color: $info-color;
+}

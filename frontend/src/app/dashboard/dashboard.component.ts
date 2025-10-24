@@ -1,12 +1,12 @@
-// Astringer/frontend/src/app/dashboard/dashboard.component.ts
+// Astringer/frontend/src/app/dashboard/dashboard.component.ts (FINALIZED with Timeout)
 
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core'; // <-- RESTORED: ViewChild, ElementRef
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CourierService, Shipment } from '../courier.service';
-// FIX: Imported catchError and of for robust error handling
-import { Observable, finalize, catchError, of } from 'rxjs';
+// FIX: Imported timeout for production robustness
+import { Observable, finalize, catchError, of, timeout } from 'rxjs';
 import { StatusClassPipe } from '../status-class.pipe';
 
 @Component({
@@ -25,10 +25,8 @@ export class DashboardComponent implements OnInit {
   shipments$!: Observable<Shipment[]>;
   isLoading: boolean = true;
 
-  // RESTORED: Property to hold network error message
   apiError: string | null = null;
 
-  // RESTORED: Get a reference to the input element in the template
   @ViewChild('trackingInput') trackingInput!: ElementRef;
 
   trackingForm!: FormGroup;
@@ -48,17 +46,33 @@ export class DashboardComponent implements OnInit {
     });
 
     this.isLoading = true;
-    this.apiError = null; // Clear previous errors
+    this.apiError = null;
 
-    // FIX: Added catchError for global API failure handling
+    // Auto-transform input for better UX/validation
+    this.trackingForm.get('trackingId')?.valueChanges.subscribe(value => {
+      if (value && typeof value === 'string') {
+        const transformedValue = value.trim().toUpperCase();
+
+        if (value !== transformedValue) {
+          this.trackingForm.get('trackingId')?.setValue(transformedValue, { emitEvent: false });
+        }
+      }
+    });
+
     this.shipments$ = this.courierService.getAllShipments().pipe(
+      // FIX: Add timeout to prevent infinite loading state
+      timeout(5000),
       finalize(() => {
         this.isLoading = false;
       }),
       catchError(err => {
         console.error('API Connection Error:', err);
-        this.apiError = 'Could not connect to the logistics server. Please ensure the backend is running.';
-        // Return an observable of an empty array so the stream completes gracefully
+
+        if (err.name === 'TimeoutError') {
+             this.apiError = 'Connection timed out (5s limit reached). The server may be unreachable.';
+        } else {
+             this.apiError = 'Could not connect to the logistics server. Please ensure the backend is running.';
+        }
         return of([]);
       })
     );
@@ -73,7 +87,6 @@ export class DashboardComponent implements OnInit {
       this.trackingForm.get('trackingId')?.markAsTouched();
       console.warn('Invalid Tracking ID entered.');
 
-      // FIX: Focus the input field on validation error for accessibility
       if (this.trackingInput) {
         this.trackingInput.nativeElement.focus();
       }

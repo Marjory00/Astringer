@@ -1,8 +1,16 @@
 <div class="detail-container">
 
   <ng-container *ngIf="shipment$ | async as shipment; else notFound">
-    <div class="tracking-header">
-      <h2>Shipment ID: {{ shipment.id }}</h2>
+
+    <div class="tracking-header-actions">
+      <div class="tracking-header">
+        <h2>Shipment ID: {{ shipment.id }}</h2>
+
+        <button class="copy-button" (click)="copyTrackingId(shipment.id)">
+            📋 Copy ID
+        </button>
+      </div>
+
       <span class="status status-{{ shipment.status | statusClass }}">
         {{ shipment.status }}
       </span>
@@ -50,6 +58,7 @@
       </div>
     </div>
   </ng-container>
+
   <ng-template #notFound>
     <div class="error-message">
       <h2>Tracking ID Not Found 😞</h2>

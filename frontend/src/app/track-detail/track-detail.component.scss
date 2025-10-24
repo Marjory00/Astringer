@@ -1,7 +1,7 @@
-/* Astringer/frontend/src/app/track-detail/track-detail.component.scss */
+/* Astringer/frontend/src/app/track-detail/track-detail.component.scss (FINALIZED) */
 
 $primary-color: #004d99; // Deep Blue
-$accent-color: #ff9900;  // Logistics Orange
+$accent-color: #ff9900;  // Logistics Orange
 $delivered-color: #28a745; // Green
 $transit-color: #007bff; // Blue
 $out-for-delivery-color: #ffc107; // Yellow/Orange
@@ -19,18 +19,47 @@ $error-color: #cc0000;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
 }
 
-.tracking-header {
+// ✨ NEW: Wrapper for the header content (ID, Button, and Status)
+.tracking-header-actions {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* Aligns content to the top */
     border-bottom: 2px solid #f0f0f0;
     padding-bottom: 15px;
     margin-bottom: 25px;
+}
+
+// FIX: This now contains only the ID and the Copy Button
+.tracking-header {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between ID and Copy Button */
+    // Removed old border styles, as they are now on .tracking-header-actions
+    padding-bottom: 0;
+    margin-bottom: 0;
 
     h2 {
         color: $primary-color;
         font-weight: 600;
         margin: 0;
+    }
+}
+
+// ✨ NEW: Style for the Copy ID button
+.copy-button {
+    background-color: #eee;
+    color: #555;
+    border: 1px solid #ccc;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover {
+        background-color: #ddd;
+        color: #333;
     }
 }
 

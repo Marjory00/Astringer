@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.scss (Global Fixes) */
+
+/* FIX for Sticky Footer: Ensures root elements are full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Optional: General styles */
+a {
+    text-decoration: none;
+    cursor: pointer;
+}

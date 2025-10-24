@@ -1,27 +1,23 @@
 /* Astringer/frontend/src/app/app.component.scss (FINALIZED) */
 
-$primary-color: #004d99; // Deep Blue, used for headers
+$primary-color: #004d99;
 
-/* V--- NEW: Styles applied directly to the host body (usually via a global style) or the app-root V */
+/* =========================================================
+   1. Global Layout (Sticky Footer)
+   ========================================================= */
+
 :host {
-    display: block; // Ensures the host element behaves like a div
-    min-height: 100vh; // Ensures the app root covers the full viewport height
-    background-color: #f4f4f9; // Light background for the whole page
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;             /* Activates Flexbox */
+    flex-direction: column;    /* Stacks children vertically */
+    min-height: 100vh;         /* Ensures the host uses the full viewport height */
+    /* Other styles are moved to global styles.scss */
 }
 
-// Container for the router-outlet content
+/* Container for the router-outlet content */
 .content-container {
-    // Limits the application width, matching the existing definition
+    flex: 1;                   /* THE KEY: Forces the main content to GROW and push the footer down */
     max-width: 1200px;
-
-    // Centers the content area
-    margin: 0 auto;
-
-    // Adds padding on the sides for smaller screens
+    margin: 0 auto; /* Centers the content area */
+    width: 90%;
     padding: 20px 20px;
-
-    // Crucial for pushing the footer to the bottom.
-    // This value is adjusted slightly higher (150px) to account for header/footer heights.
-    min-height: calc(100vh - 150px);
 }
