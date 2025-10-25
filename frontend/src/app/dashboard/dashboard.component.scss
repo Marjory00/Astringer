@@ -1,9 +1,14 @@
-/* src/app/dashboard/dashboard.component.scss */
+/* src/app/dashboard/dashboard.component.scss (IMPROVED AND FIXED) */
 
-$primary-color: #004d99;
-$accent-color: #ff9900;
+$primary-color: #004d99; // Deep Blue
+$accent-color: #ff9900; // Logistics Orange
 $light-gray: #f4f7fa;
 $border-color: #e0e0e0;
+
+/* New System Health Colors */
+$operational: #4CAF50; // Green
+$degraded: #FFC107; // Yellow/Amber
+$offline: #F44336; // Red
 
 .dashboard-container {
     padding: 20px;
@@ -24,7 +29,21 @@ $border-color: #e0e0e0;
     }
 }
 
-/* 1. Loading and Error States */
+// 💥 FIX 1: Global Card Style (used for health cards)
+.info-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* 1. Loading and Error States (No change needed) */
 
 .loading-state, .error-state, .empty-state {
     padding: 20px;
@@ -72,7 +91,65 @@ $border-color: #e0e0e0;
     }
 }
 
-/* 2. Shipments Table Styling */
+/* 💥 FIX 2: New System Health Grid Styling */
+
+.system-health-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.health-card {
+    @extend .info-card; /* Use the global card style */
+    text-align: center;
+    padding: 15px;
+    border-left: 5px solid;
+
+    h2 {
+        font-size: 1.1em;
+        margin-bottom: 5px;
+        border-bottom: none;
+        color: #555;
+    }
+
+    .fas {
+        font-size: 2.5em;
+        margin: 10px 0;
+    }
+
+    .status-text {
+        font-weight: 700;
+        margin-top: 5px;
+        font-size: 1.2em;
+    }
+
+    small {
+        color: #999;
+    }
+}
+
+// Health Color Classes
+.operational {
+    border-left-color: $operational;
+    color: $operational;
+    .fas { color: $operational; }
+}
+
+.degraded {
+    border-left-color: $degraded;
+    color: darken($degraded, 20%);
+    .fas { color: $degraded; }
+}
+
+.offline {
+    border-left-color: $offline;
+    color: $offline;
+    .fas { color: $offline; }
+}
+
+
+/* 2. Shipments Table Styling (No change needed) */
 
 .shipments-table-container {
     overflow-x: auto;
@@ -119,7 +196,7 @@ tbody {
     }
 }
 
-/* 3. Status Badges and Colors */
+/* 3. Status Badges and Colors (No change needed) */
 
 .status {
     padding: 4px 8px;
@@ -151,7 +228,7 @@ tbody {
     }
 }
 
-/* 4. Action Buttons */
+/* 4. Action Buttons (No change needed) */
 
 .dashboard-actions {
     text-align: right;
@@ -194,7 +271,7 @@ tbody {
     }
 }
 
-/* Keyframe for Loading Spinner */
+/* Keyframe for Loading Spinner (No change needed) */
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }

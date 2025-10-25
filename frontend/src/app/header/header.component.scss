@@ -45,8 +45,8 @@ $text-color: #f7f7f7; // Light gray/off-white
 }
 
 .logo-icon {
-    width: 30px;
-    height: 30px;
+    width: 65px;
+    height: 70px;
     margin-right: 10px;
     flex-shrink: 0;
 }
@@ -54,7 +54,7 @@ $text-color: #f7f7f7; // Light gray/off-white
 /* 3. Navigation Links Area */
 
 .nav-links a {
-    // 💥 FIX: Changed default color from #c7d2e0 to white for guaranteed visibility 💥
+    // FIX: Changed default color from #c7d2e0 to white for guaranteed visibility
     color: white;
     text-decoration: none;
     font-weight: 500;

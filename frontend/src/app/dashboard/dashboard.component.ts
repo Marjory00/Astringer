@@ -6,7 +6,15 @@ import { Router, RouterLink } from '@angular/router';
 import { ShipmentService } from '../shipment.service';
 import { Shipment } from '../shipment.model';
 import { Observable, finalize, catchError, of, timeout, tap } from 'rxjs';
+// Assuming StatusClassPipe is a custom pipe and has been created
 import { StatusClassPipe } from "../status-class.pipe";
+
+// 💥 NEW: Interface for System Health Data
+export interface SystemHealth {
+  name: string;
+  status: 'Operational' | 'Degraded' | 'Offline' | 'Unknown';
+  latency: number;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +28,16 @@ import { StatusClassPipe } from "../status-class.pipe";
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+
+  // 💥 FIX: Define systemHealth with mock data
+  systemHealth: SystemHealth[] = [
+    { name: 'WMS (Warehouse)', status: 'Operational', latency: 45 },
+    { name: 'TMS (Routing)', status: 'Operational', latency: 60 },
+    { name: 'Customer API', status: 'Degraded', latency: 250 },
+    { name: 'Billing Service', status: 'Operational', latency: 30 },
+    { name: 'Last-Mile App', status: 'Offline', latency: 0 }
+  ];
+
   shipments$!: Observable<Shipment[]>;
   isLoading: boolean = true;
   apiError: string | null = null;
@@ -36,14 +54,12 @@ export class DashboardComponent implements OnInit {
     // Core Loading Logic
     this.shipments$ = this.shipmentService.getAllShipments().pipe(
       tap(() => {
-          // Stops loading on SUCCESS before finalize
           this.isLoading = false;
       }),
-      timeout(5000), // Timeout after 5 seconds
+      timeout(5000),
       finalize(() => {
-        // Ensures spinner stops regardless of success/error path
         if (this.isLoading === true) {
-             this.isLoading = false;
+           this.isLoading = false;
         }
       }),
       catchError(err => {
@@ -56,19 +72,39 @@ export class DashboardComponent implements OnInit {
         }
 
         this.isLoading = false;
-        return of([]); // Return an empty array to prevent app crash
+        return of([]);
       })
     );
   }
 
+  // 💥 FIX: Implemented method to get the SCSS class name for health status
+  getHealthClass(status: string): string {
+    switch (status) {
+      case 'Operational': return 'operational';
+      case 'Degraded': return 'degraded';
+      case 'Offline': return 'offline';
+      default: return 'unknown';
+    }
+  }
+
+  // 💥 FIX: Implemented method to get the Font Awesome icon for health status
+  getHealthIcon(status: string): string {
+    switch (status) {
+      case 'Operational': return 'fa-check-circle';
+      case 'Degraded': return 'fa-exclamation-triangle';
+      case 'Offline': return 'fa-times-circle';
+      default: return 'fa-question-circle';
+    }
+  }
+
   getStatusIcon(status: string): string {
-      switch (status.toLowerCase()) {
-        case 'created': return 'fa-box-open';
-        case 'in transit': return 'fa-shipping-fast';
-        case 'out for delivery': return 'fa-route';
-        case 'delivered': return 'fa-check-circle';
-        default: return 'fa-question-circle';
-      }
+    switch (status.toLowerCase()) {
+      case 'created': return 'fa-box-open';
+      case 'in transit': return 'fa-shipping-fast';
+      case 'out for delivery': return 'fa-route';
+      case 'delivered': return 'fa-check-circle';
+      default: return 'fa-question-circle';
+    }
   }
 
   navigateToTracking(id: string) {

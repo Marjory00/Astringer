@@ -1,36 +1,98 @@
-<div class="planning-container">
+<div class="planning-container info-card">
   <h1><i class="fas fa-box-open"></i> Plan New Shipment</h1>
-  <p class="description">Use this form to quickly create a new shipment record, assign a tracking ID, and set the route details.</p>
+  <p>Fill out the details below to create a new delivery route and generate a tracking ID.</p>
 
-  <form class="shipment-form">
-    <div class="form-group">
-      <label for="tracking-id">Tracking ID</label>
-      <input id="tracking-id" type="text" [value]="'AST-' + getRandomId()" readonly>
+  <form [formGroup]="shipmentForm" (ngSubmit)="onSubmit()">
+
+    <div class="form-section">
+      <h2>Route Details</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="origin">Origin City/State *</label>
+          <select id="origin" formControlName="origin" required>
+            <option value="" disabled>Select Origin</option>
+            <option *ngFor="let loc of origins" [value]="loc">{{ loc }}</option>
+          </select>
+          <div class="error-message"
+               *ngIf="controls['origin'].invalid && (controls['origin'].dirty || controls['origin'].touched)">
+            Origin is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="destination">Destination City/State *</label>
+          <select id="destination" formControlName="destination" required>
+            <option value="" disabled>Select Destination</option>
+            <option *ngFor="let loc of destinations" [value]="loc">{{ loc }}</option>
+          </select>
+          <div class="error-message"
+               *ngIf="controls['destination'].invalid && (controls['destination'].dirty || controls['destination'].touched)">
+            Destination is required.
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="origin">Origin City</label>
-      <input id="origin" type="text" placeholder="e.g., Miami, FL">
+    <div class="form-section">
+      <h2>Package Details</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="weight">Weight (kg) *</label>
+          <input id="weight" type="number" formControlName="weight" placeholder="e.g., 15.5" required>
+          <div class="error-message"
+               *ngIf="controls['weight'].invalid && (controls['weight'].dirty || controls['weight'].touched)">
+            Weight is required and must be a positive number.
+          </div>
+        </div>
+      </div>
+
+      <div formGroupName="dimensions" class="form-row dimensions-group">
+        <label>Dimensions (cm) *</label>
+        <div class="input-group">
+          <input type="number" formControlName="length" placeholder="Length" required>
+          <input type="number" formControlName="width" placeholder="Width" required>
+          <input type="number" formControlName="height" placeholder="Height" required>
+        </div>
+        <div class="error-message full-width"
+             *ngIf="shipmentForm.get('dimensions')!.invalid && (shipmentForm.get('dimensions')!.dirty || shipmentForm.get('dimensions')!.touched)">
+          All dimensions (L x W x H) are required and must be positive numbers.
+        </div>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="destination">Destination City</label>
-      <input id="destination" type="text" placeholder="e.g., Seattle, WA">
+    <div class="form-section">
+      <h2>Logistics & Instructions</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="carrier">Assigned Carrier *</label>
+          <select id="carrier" formControlName="carrier" required>
+            <option value="" disabled>Select Carrier</option>
+            <option *ngFor="let c of carriers" [value]="c">{{ c }}</option>
+          </select>
+          <div class="error-message"
+               *ngIf="controls['carrier'].invalid && (controls['carrier'].dirty || controls['carrier'].touched)">
+            Carrier selection is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="instructions">Special Instructions</label>
+          <textarea id="instructions" formControlName="specialInstructions" rows="3" placeholder="e.g., Fragile, Do not stack, Deliver before 10 AM."></textarea>
+        </div>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="delivery-date">Estimated Delivery Date</label>
-      <input id="delivery-date" type="date">
+    <div class="form-actions">
+      <button type="submit" [disabled]="shipmentForm.invalid || isLoading" class="submit-button primary-button">
+        <i class="fas fa-save"></i>
+        {{ isLoading ? 'Processing...' : 'Plan Shipment & Generate ID' }}
+      </button>
+      <div *ngIf="isLoading" class="loading-indicator">
+        <i class="fas fa-spinner fa-spin"></i>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="status">Initial Status</label>
-      <select id="status">
-        <option>Created</option>
-        <option>In Transit</option>
-      </select>
-    </div>
-
-    <button type="submit" class="primary-button">Create Shipment</button>
   </form>
 </div>
