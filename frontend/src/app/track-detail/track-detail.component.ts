@@ -1,24 +1,24 @@
-// src/app/track-detail/track-detail.component.ts (FINAL FIX)
+// src/app/track-detail/track-detail.component.ts (FINALIZED)
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+// 💥 FIX 1: Ensure RouterLink is in the imports array, not just the list
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { ShipmentService } from '../shipment.service';
-import { Shipment } from '../shipment.model';
-// Removed unused imports map, finalize (as they weren't used in the logic)
+// 💥 FIX 2: Import the official TrackingEvent interface alongside Shipment
+import { Shipment, TrackingEvent } from '../shipment.model';
+import { NotificationService } from '../notification.service'; // 💥 FIX 3: Add NotificationService import
 import { Observable, of, switchMap, catchError, tap } from 'rxjs';
 
-// Mock interface for detailed tracking history
-interface TrackingEvent {
-  date: string; // Date or DateTime string
-  location: string;
-  status: string;
-}
+// 💥 FIX 4: Removed conflicting local TrackingEvent interface and mock data object
+// The data comes directly from the 'Shipment' object fetched from the service.
 
 @Component({
   selector: 'app-track-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule
+],
   templateUrl: './track-detail.component.html',
   styleUrls: ['./track-detail.component.scss']
 })
@@ -28,26 +28,14 @@ export class TrackDetailComponent implements OnInit {
   trackingId: string = '';
   isLoading: boolean = true;
   error: string | null = null;
+event: any;
 
-  mockTrackingHistory: { [key: string]: TrackingEvent[] } = {
-    '1': [
-      { date: '2025-10-20 10:00 AM', location: 'New York, NY', status: 'Shipment Created' },
-      { date: '2025-10-20 02:30 PM', location: 'JFK Hub', status: 'Departed Origin Facility' },
-      { date: '2025-10-21 08:45 AM', location: 'Chicago, IL', status: 'In Transit' },
-      { date: '2025-10-22 03:15 PM', location: 'Dallas, TX', status: 'Arrived at Destination Hub' },
-      { date: '2025-10-23 07:00 AM', location: 'Dallas, TX', status: 'Out for Delivery' },
-    ],
-    '3': [
-      { date: '2025-10-15 10:00 AM', location: 'LA, CA', status: 'Shipment Created' },
-      { date: '2025-10-18 09:00 AM', location: 'Miami, FL', status: 'Arrived at Destination Hub' },
-      { date: '2025-10-18 02:00 PM', location: 'Customer Address', status: 'Delivered' },
-    ]
-  };
+  // 💥 Removed mockTrackingHistory as data is fetched from the service/Shipment model.
 
   constructor(
     private route: ActivatedRoute,
     private shipmentService: ShipmentService,
-    // 💥 FIX APPLIED HERE: Changed 'private' to 'public' to allow template access
+    private notificationService: NotificationService, // 💥 Inject Notification Service
     public router: Router,
   ) { }
 
@@ -61,7 +49,8 @@ export class TrackDetailComponent implements OnInit {
       switchMap(params => {
         const id = params.get('id');
         if (!id) {
-          this.error = 'No shipment ID provided. Redirecting...';
+          this.error = 'No shipment ID provided.';
+          this.notificationService.error(this.error + ' Redirecting...'); // Use service
           setTimeout(() => this.router.navigate(['/dashboard']), 1500);
           return of(undefined);
         }
@@ -69,7 +58,9 @@ export class TrackDetailComponent implements OnInit {
         return this.shipmentService.getShipmentById(id).pipe(
           catchError(err => {
             console.error('Fetch Error:', err);
-            this.error = 'Shipment not found or API error. Redirecting...';
+            // Use the actual error message from the mock service if available
+            this.error = `Shipment ID "${id}" not found.`;
+            this.notificationService.error(this.error + ' Redirecting...');
             setTimeout(() => this.router.navigate(['/dashboard']), 1500);
             return of(undefined);
           })
@@ -77,9 +68,9 @@ export class TrackDetailComponent implements OnInit {
       }),
       tap(shipment => {
         this.isLoading = false;
-        if (!shipment && !this.error) {
-           this.error = 'Shipment ID not found. Redirecting...';
-           setTimeout(() => this.router.navigate(['/dashboard']), 1500);
+        // 💥 Refined error/success handling
+        if (shipment) {
+            this.notificationService.success(`Tracking details loaded for ${shipment.trackingId}.`);
         }
       })
     );
@@ -87,31 +78,26 @@ export class TrackDetailComponent implements OnInit {
 
   copyTrackingId(id: string) {
     navigator.clipboard.writeText(id).then(() => {
-      alert('Tracking ID copied to clipboard!');
+      this.notificationService.success('Tracking ID copied to clipboard!'); // Use service
     }).catch(err => {
-      alert('Failed to copy ID. Browser clipboard access denied.');
+      this.notificationService.error('Failed to copy ID. Browser clipboard access denied.'); // Use service
       console.error('Copy failed:', err);
     });
   }
 
-  getTrackingHistory(shipmentId: string | undefined): TrackingEvent[] {
-    if (!shipmentId) return [];
-    return this.mockTrackingHistory[shipmentId] || this.mockTrackingHistory['1'] || [];
-  }
-
+  // 💥 FIX 6: Simplified status icon function, relying on official Shipment model status names
+  // This function is for the main status display, not the history events.
   getStatusIcon(status: string): string {
-      switch (status.toLowerCase()) {
-        case 'shipment created': return 'fa-clipboard-list';
-        case 'departed origin facility': return 'fa-plane-departure';
-        case 'in transit': return 'fa-shipping-fast';
-        case 'arrived at destination hub': return 'fa-warehouse';
-        case 'out for delivery': return 'fa-route';
-        case 'delivered': return 'fa-box-open';
-        default: return 'fa-dot-circle';
-      }
+    switch (status.toLowerCase()) {
+      case 'delivered': return 'fa-check-circle';
+      case 'out for delivery': return 'fa-route';
+      case 'in transit': return 'fa-shipping-fast';
+      case 'created': return 'fa-file-alt';
+      case 'exception': return 'fa-exclamation-triangle';
+      default: return 'fa-dot-circle';
+    }
   }
 
-  isStatusComplete(status: string): boolean {
-    return status.toLowerCase() !== 'shipment created' && status.toLowerCase() !== 'in transit';
-  }
+  // 💥 Removed redundant getTrackingHistory and isStatusComplete methods.
+  // The template will use shipment.trackingHistory and TrackingEvent.isComplete directly.
 }

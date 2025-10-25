@@ -1,7 +1,4 @@
-// src/app/header/header.component.ts (FINALIZED, *ngFor FIX)
-
 import { Component } from '@angular/core';
-// 💥 FIX 1: CommonModule provides the *ngFor directive
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +13,7 @@ interface NavItem {
   selector: 'app-header',
   standalone: true,
   imports: [
-    CommonModule,         // 💥 FIX 2: Added to support *ngFor in the template
+    CommonModule,
     FormsModule,
     RouterLink,
     RouterLinkActive
@@ -27,15 +24,20 @@ interface NavItem {
 export class HeaderComponent {
   appTitle: string = 'Astringer Logistics';
   trackingId: string = '';
+  isMobileMenuOpen: boolean = false;
 
   navItems: NavItem[] = [
     { path: '/dashboard', label: 'Dashboard', icon: 'fa-chart-line' },
     { path: '/planning', label: 'Planning', icon: 'fa-calendar-alt' },
     { path: '/reporting', label: 'Reporting', icon: 'fa-clipboard-list' },
-    { path: '/settings', label: 'Settings', icon: 'fa-cog' },
+    { path: '/settings', label: 'Settings', icon: 'fa-cog' }
   ];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
 
   onTrackSubmit(): void {
     const id = this.trackingId.trim();
@@ -43,5 +45,10 @@ export class HeaderComponent {
       this.router.navigate(['/track', id]);
       this.trackingId = '';
     }
+  }
+
+  onQuickTrack(): void {
+    // Optional: implement quick tracking logic here
+    console.log('Quick track triggered');
   }
 }

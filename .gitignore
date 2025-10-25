@@ -1,22 +1,48 @@
-# Dependency directories
+# ----------------------------------------------------------------------
+# 📦 Dependency Directories
+# ----------------------------------------------------------------------
+# Node modules are rebuilt locally; never commit them.
 /backend/node_modules
 /frontend/node_modules
 
-# Logs
+# ----------------------------------------------------------------------
+# 📄 Logs, History, and Temporary Files
+# ----------------------------------------------------------------------
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+.npm
+.eslintcache
+.yarn-integrity
+*.tgz
 
-# OS and IDE files
-.DS_Store
-.vscode/
-
-# Build artifacts
+# ----------------------------------------------------------------------
+# 🖥️ Build Artifacts and Compilation Output
+# ----------------------------------------------------------------------
+# Frontend build directory (Angular/React/Vue output)
 /frontend/dist
+# Common backend compilation outputs (e.g., TypeScript or Babel)
+/backend/build
+/backend/dist
+/backend/tmp
+/coverage
 
+# ----------------------------------------------------------------------
 # 🚨 SENSITIVE BACKEND FILES (Credentials, Keys, etc.)
-# If you use environment variables:
+# ----------------------------------------------------------------------
+# NEVER commit environment variables or secret files.
 /backend/.env
-# If you use a secret keys file:
+/backend/.env.*
 /backend/config/secrets.js
+
+# ----------------------------------------------------------------------
+# 🍏 OS and IDE Files
+# ----------------------------------------------------------------------
+.DS_Store             # macOS
+Thumbs.db             # Windows
+*.swp                 # Vim temporary files
+
+# IDE Files (VS Code, WebStorm, etc.)
+.vscode/              # VS Code settings
+.idea/                # IntelliJ/WebStorm settings

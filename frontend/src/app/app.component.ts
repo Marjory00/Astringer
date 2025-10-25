@@ -14,7 +14,6 @@ import { FooterComponent } from "./footer/footer.component";
   imports: [
     CommonModule,
     RouterOutlet,
-    RouterLink,
     HeaderComponent,
     NotificationComponent,
     FooterComponent // 💥 FooterComponent added to imports

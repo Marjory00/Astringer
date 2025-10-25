@@ -1,43 +1,42 @@
-<header class="app-header">
+<header class="main-header">
+  <div class="header-container">
 
-  <div class="header-brand">
-    <a [routerLink]="['/dashboard']"
-       class="logo-link"
-       routerLinkActive="active"
-       [routerLinkActiveOptions]="{exact: true}">
-
-      <i class="fas fa-truck logo-icon"></i>
-      <span class="app-title">{{ appTitle }}</span>
+    <!-- Logo -->
+    <a class="header-logo" routerLink="/">
+      <i class="fas fa-shipping-fast logo-icon"></i>
+      <span class="logo-text">Astringer Logistics</span>
     </a>
+
+    <!-- Navigation -->
+    <nav class="main-nav" [ngClass]="{ 'open': isMobileMenuOpen }">
+      <ul>
+        <li *ngFor="let item of navItems">
+          <a [routerLink]="item.path" routerLinkActive="active">
+            <i class="fas" [ngClass]="item.icon"></i> {{ item.label }}
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Quick Track Form -->
+    <div class="quick-track-container">
+      <form (ngSubmit)="onQuickTrack()">
+        <input
+          type="search"
+          placeholder="Track ID"
+          [(ngModel)]="trackingId"
+          name="trackingIdInput"
+          required
+        >
+        <button type="submit" [disabled]="!trackingId">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" (click)="toggleMobileMenu()">
+      <i class="fas fa-bars"></i>
+    </button>
   </div>
-
-  <nav class="header-nav">
-    <ul>
-      <li *ngFor="let item of navItems">
-        <a
-          [routerLink]="[item.path]"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{exact: true}"
-          class="nav-item">
-          <i class="fas" [ngClass]="item.icon"></i>
-          <span class="nav-label">{{ item.label }}</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
-
-  <div class="header-search">
-    <form (ngSubmit)="onTrackSubmit()">
-      <input
-        type="text"
-        placeholder="Quick Track ID..."
-        [(ngModel)]="trackingId"
-        name="trackingId"
-        required>
-      <button type="submit" [disabled]="!trackingId">
-        <i class="fas fa-search"></i>
-      </button>
-    </form>
-  </div>
-
 </header>

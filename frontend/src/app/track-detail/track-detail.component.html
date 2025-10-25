@@ -1,7 +1,9 @@
-<div class="tracking-container">
+<div class="track-detail-container">
 
-  <h1 class="page-header"><i class="fas fa-search-location"></i> Tracking Details</h1>
-  <button (click)="router.navigate(['/dashboard'])" class="back-button"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+  <div class="page-header-row">
+    <h1 class="page-header"><i class="fas fa-search-location"></i> Shipment Tracking</h1>
+    <button (click)="router.navigate(['/dashboard'])" class="back-button"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+  </div>
 
   <div *ngIf="isLoading" class="loading-state">
     <i class="fas fa-spinner fa-spin"></i> Loading tracking information for ID: {{ trackingId }}...
@@ -17,26 +19,26 @@
 
       <div class="details-grid">
 
-        <div class="info-card status-card">
-          <h2>Current Status</h2>
+        <div class="info-card status-card" [ngClass]="['status-' + shipment.status.toLowerCase().replace(' ', '-')]">
+          <h2>Shipment Status</h2>
           <p class="current-status">{{ shipment.status }}</p>
           <div class="eta">
             <i class="fas fa-clock"></i>
             ETA: **{{ shipment.estimatedDelivery | date:'fullDate' }}**
           </div>
-          <button class="copy-button" (click)="copyTrackingId(shipment.id)">
-             <i class="fas fa-copy"></i> Copy Tracking ID
+          <p class="tracking-id-display">
+            Tracking ID: **{{ shipment.trackingId }}**
+          </p>
+          <button class="copy-button" (click)="copyTrackingId(shipment.trackingId)">
+            <i class="fas fa-copy"></i> Copy ID
           </button>
         </div>
 
         <div class="info-card route-card">
           <h2>Route Information</h2>
-          <div class="route-info">
-            <div class="route-item current-location"><i class="fas fa-map-pin"></i> **Current:** {{ shipment.location || 'Unknown' }}</div>
-          </div>
-          <div class="route-info">
-            <div class="route-item origin"><i class="fas fa-map-marker-alt"></i> **Origin:** {{ shipment.origin }}</div>
-            <div class="route-arrow"><i class="fas fa-long-arrow-alt-right"></i></div>
+          <div class="route-info-detail">
+            <div class="route-item origin"><i class="fas fa-warehouse"></i> **Origin:** {{ shipment.origin }}</div>
+            <div class="route-arrow"><i class="fas fa-route"></i></div>
             <div class="route-item destination"><i class="fas fa-map-marked-alt"></i> **Destination:** {{ shipment.destination }}</div>
           </div>
         </div>
@@ -44,24 +46,23 @@
       </div>
 
       <div class="info-card timeline-card">
-        <h2>Tracking History for ID: {{ shipment.trackingId }}</h2>
+        <h2>Detailed Timeline</h2>
 
         <div class="timeline">
-          <div class="timeline-event"
-              [ngClass]="{ 'completed': isStatusComplete(event.status) }"
-              *ngFor="let event of getTrackingHistory(shipment.id)">
+          <div class="timeline-item"
+               [ngClass]="{ 'item-complete': event.isComplete }"
+               *ngFor="let event of shipment.trackingHistory; trackBy: event.timestamp">
 
-            <div class="timeline-icon">
-              <i class="fas" [ngClass]="getStatusIcon(event.status)"></i>
-            </div>
-
-            <div class="timeline-content">
-              <div class="status-title">{{ event.status }}</div>
-              <div class="location-date">
-                <i class="fas fa-calendar-alt"></i> {{ event.date | date:'medium' }}
-                <span class="location"> @ {{ event.location }}</span>
+            <div class="event-details">
+              <div class="event-info">
+                <div class="event-title">{{ event.status }}</div>
+                <div class="event-location"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</div>
+              </div>
+              <div class="event-timestamp">
+                {{ event.timestamp | date:'medium' }}
               </div>
             </div>
+
           </div>
         </div>
       </div>

@@ -1,42 +1,69 @@
-/* src/styles.scss (IMPROVED) */
+/* src/styles.scss (FINALIZED & CLEANED) */
 
-$primary-color: #004d99; // Deep Blue
-$accent-color: #ff9900; // Logistics Orange
-$background-color: #eef2f6; // Light, professional background
+// 🎨 Design Tokens
+$primary-color: #004d99;   // Deep Blue
+$accent-color: #ff9900;    // Logistics Orange
+$background-color: #eef2f6;
 $font-stack: 'Roboto', 'Helvetica Neue', sans-serif;
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: $font-stack;
-    background-color: $background-color;
-    color: #333;
+// 💥 FIX A: Guarantee full-width layout
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: $font-stack;
+  background-color: $background-color;
+  color: #333;
+  box-sizing: border-box;
 }
 
-// Global container for content area padding and centering
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+// 📦 FontAwesome Icons: The @import line was REMOVED.
+// FontAwesome is now loaded globally via 'angular.json'.
+
+// 📐 Layout Containers (These global styles are superseded by component-specific styles)
+.main-header {
+  width: 100%;
+}
+
+.navbar {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+}
+
+// 🧱 Content Area
 .content-area {
-    padding: 30px;
-    background-color: $background-color;
-    min-height: calc(100vh - 100px); /* Adjust based on your header/footer heights */
+  padding: 30px;
+  background-color: $background-color;
+  min-height: calc(100vh - 100px);
 }
 
-// Global Card Style (used in dashboards, reports, etc.)
+// 🧾 Card Component
 .info-card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    padding: 20px;
-    margin-bottom: 20px;
-    transition: transform 0.2s;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.2s;
 
-    &:hover {
-        transform: translateY(-2px);
-    }
+  &:hover {
+    transform: translateY(-2px);
+  }
 
-    h2 {
-        color: $primary-color;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 10px;
-        margin-top: 0;
-    }
+  h2 {
+    color: $primary-color;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 0;
+  }
 }

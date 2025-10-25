@@ -1,59 +1,52 @@
-// src/app/shipment.service.ts (FIXED: Using Mock Data)
+// src/app/shipment.service.ts (FINALIZED, Cast Fix)
 
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { delay, catchError } from 'rxjs/operators';
+import { delay, switchMap } from 'rxjs/operators';
 import { Shipment } from './shipment.model';
-import { MOCK_SHIPMENTS } from './mock-shipments'; // 💥 New mock data import
+import { MOCK_SHIPMENTS } from './mock-shipments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShipmentService {
-  // 💥 Removed HttpClient dependency and apiUrl since we are using local data
 
-  // Simulated network latency
   private readonly MOCK_LATENCY = 300;
 
   constructor() { }
 
   /**
    * Retrieves all shipments from the mock data.
-   * @returns An Observable of all Shipment objects.
    */
   getAllShipments(): Observable<Shipment[]> {
-    // Simulate an HTTP GET call
-    return of(MOCK_SHIPMENTS).pipe(
+    // 💥 FIX: Casting MOCK_SHIPMENTS as Shipment[] to satisfy compiler type checks across files
+    return of(MOCK_SHIPMENTS as Shipment[]).pipe(
       delay(this.MOCK_LATENCY)
     );
   }
 
   /**
    * Retrieves a single shipment by its ID or Tracking ID.
-   * @param id The shipment ID (internal or tracking ID).
-   * @returns An Observable of the found Shipment or an error.
    */
   getShipmentById(id: string): Observable<Shipment> {
-    const shipment = MOCK_SHIPMENTS.find(
+    // Find operation on the explicitly typed array
+    const shipment = (MOCK_SHIPMENTS as Shipment[]).find(
       s => s.id === id || s.trackingId === id
     );
 
-    // Simulate network delay and handle not found error
     return of(shipment).pipe(
       delay(this.MOCK_LATENCY),
-      catchError(() => {
-        if (!shipment) {
+      switchMap(result => {
+        if (!result) {
           return throwError(() => new Error(`Shipment with ID ${id} not found.`));
         }
-        return of(shipment as Shipment); // Should not happen, but satisfies type checking
+        return of(result); // result is guaranteed to be Shipment here
       })
     );
   }
 
   /**
    * Searches shipments by partial tracking ID or destination.
-   * @param query The search term.
-   * @returns An Observable of filtered Shipment objects.
    */
   searchShipments(query: string): Observable<Shipment[]> {
     const term = query.toLowerCase().trim();
@@ -61,7 +54,7 @@ export class ShipmentService {
       return this.getAllShipments();
     }
 
-    const filtered = MOCK_SHIPMENTS.filter(s =>
+    const filtered = (MOCK_SHIPMENTS as Shipment[]).filter(s =>
       s.trackingId.toLowerCase().includes(term) ||
       s.destination.toLowerCase().includes(term)
     );

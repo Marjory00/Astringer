@@ -1,4 +1,4 @@
-/* src/app/app.component.scss */
+/* src/app/app.component.scss (FINALIZED) */
 
 $primary-color: #004d99;
 $accent-color: #ff9900;
@@ -9,10 +9,14 @@ $background-color: #f4f7fa;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    width: 100%; /* 💥 FIX 1: Ensure the root container is full width */
+    background-color: $background-color;
 }
 
 /* 1. Header and Navigation */
 .main-header {
+    width: 100%; /* 💥 FIX 2: Explicitly set the header element itself to full width */
+    margin: 0; /* Reset margins */
     background-color: $primary-color;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: sticky;
@@ -20,9 +24,12 @@ $background-color: #f4f7fa;
     z-index: 1000;
 }
 
+// 💥 FIX 3: This container's job is to center the content and apply horizontal padding,
+// but it must not be the cause of the width issue.
 .navbar {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%; /* Ensure the inner container uses the full width of the header */
+    max-width: 1400px; /* Increased max-width for better desktop view */
+    margin: 0 auto; /* Centers the content */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -71,6 +78,7 @@ $background-color: #f4f7fa;
 
 /* 2. Content Area */
 .content-area {
+    // Max width should be slightly less than the header's inner max-width for contrast
     max-width: 1200px;
     margin: 30px auto;
     padding: 0 30px;
@@ -82,6 +90,7 @@ $background-color: #f4f7fa;
 .main-footer {
     background-color: #333;
     color: #ccc;
+    width: 100%; /* Ensure footer also spans full width */
     padding: 15px 30px;
     font-size: 0.9em;
     text-align: center;
