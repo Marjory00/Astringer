@@ -32,7 +32,7 @@ $text-color: #f7f7f7; // Light gray/off-white
     .logo-link { /* Link wraps the image and title */
         color: $text-color;
         text-decoration: none;
-        font-size: 1.5em; /* Matches previous logo font size */
+        font-size: 1.5em;
         font-weight: 700;
         display: flex;
         align-items: center;
@@ -54,7 +54,8 @@ $text-color: #f7f7f7; // Light gray/off-white
 /* 3. Navigation Links Area */
 
 .nav-links a {
-    color: #c7d2e0;
+    // 💥 FIX: Changed default color from #c7d2e0 to white for guaranteed visibility 💥
+    color: white;
     text-decoration: none;
     font-weight: 500;
     padding: 10px 15px;

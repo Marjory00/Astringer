@@ -6,6 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ShipmentService } from '../shipment.service';
 import { Shipment } from '../shipment.model';
 import { Observable, finalize, catchError, of, timeout, tap } from 'rxjs';
+import { StatusClassPipe } from "../status-class.pipe";
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,8 @@ import { Observable, finalize, catchError, of, timeout, tap } from 'rxjs';
   imports: [
     CommonModule,
     RouterLink,
-  ],
+    StatusClassPipe
+],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

@@ -1,195 +1,201 @@
-/* Astringer/frontend/src/app/dashboard/dashboard.component.scss (FINALIZED & FIXED) */
+/* src/app/dashboard/dashboard.component.scss */
 
-@use "sass:color"; // FIX: Import the color module for modern color functions
+$primary-color: #004d99;
+$accent-color: #ff9900;
+$light-gray: #f4f7fa;
+$border-color: #e0e0e0;
 
-$primary-color: #004d99; // Deep Blue
-$accent-color: #ff9900;  // Logistics Orange
-$error-color: #dc3545;
-$delivered-color: #28a745;
-$transit-color: #007bff;
-$out-for-delivery-color: #ffc107;
+.dashboard-container {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
-/* =========================================================
-   1. Search Box & Validation
-   ========================================================= */
+    h1 {
+        color: $primary-color;
+        border-bottom: 2px solid $border-color;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        font-size: 1.8em;
 
-.search-box {
-    background-color: #f8f8f8;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    margin-bottom: 40px;
+        .fas {
+            margin-right: 10px;
+        }
+    }
 }
 
-.search-box form {
-    display: flex;
-    gap: 15px;
-    align-items: stretch;
-}
+/* 1. Loading and Error States */
 
-.search-box input {
-    flex-grow: 1;
-    padding: 12px 15px;
-    font-size: 1em;
-    border: 1px solid #ccc;
+.loading-state, .error-state, .empty-state {
+    padding: 20px;
+    margin: 20px 0;
     border-radius: 6px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    font-size: 1.1em;
+    font-weight: 500;
+    text-align: center;
+}
 
-    &:focus {
-        border-color: $accent-color;
-        box-shadow: 0 0 0 3px rgba($accent-color, 0.2);
-        outline: none;
-    }
+.loading-state {
+    background-color: $light-gray;
+    color: $primary-color;
 
-    /* Validation State */
-    &.ng-invalid.ng-touched {
-        border-color: $error-color;
-        box-shadow: 0 0 0 3px rgba($error-color, 0.1);
+    .fa-spinner {
+        margin-right: 8px;
+        animation: spin 1.5s linear infinite;
     }
 }
 
-.search-box button {
-    padding: 12px 25px;
+.error-state {
+    background-color: #ffebee; /* Light Red */
+    color: #d32f2f; /* Dark Red */
+    border: 1px solid #ef9a9a;
+}
+
+.empty-state {
+    background-color: #e3f2fd; /* Light Blue */
+    color: #1565c0; /* Dark Blue */
+    border: 1px solid #90caf9;
+
+    .fa-box-open {
+        margin-right: 8px;
+    }
+
+    .plan-link {
+        color: $accent-color;
+        text-decoration: none;
+        margin-left: 10px;
+        font-weight: 600;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+/* 2. Shipments Table Styling */
+
+.shipments-table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+thead {
     background-color: $primary-color;
     color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1em;
+    th {
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+}
+
+tbody {
+    tr:nth-child(even) {
+        background-color: $light-gray;
+    }
+    tr:hover {
+        background-color: #e0f7fa;
+    }
+    td {
+        padding: 12px 15px;
+        border-bottom: 1px solid $border-color;
+    }
+}
+
+.id-link a {
+    color: $primary-color;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+        text-decoration: underline;
+        color: $accent-color;
+    }
+}
+
+/* 3. Status Badges and Colors */
+
+.status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 600;
+    white-space: nowrap;
+
+    i {
+        margin-right: 5px;
+    }
+
+    // Status color classes (based on lowercase shipment status)
+    &.created {
+        background-color: #fce4ec;
+        color: #c2185b;
+    }
+    &.in.transit {
+        background-color: #ffe0b2;
+        color: #ef6c00;
+    }
+    &.out.for.delivery {
+        background-color: #c8e6c9;
+        color: #388e3c;
+    }
+    &.delivered {
+        background-color: #bbdefb;
+        color: #1976d2;
+    }
+}
+
+/* 4. Action Buttons */
+
+.dashboard-actions {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.primary-button {
+    background-color: $accent-color;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
     font-weight: 600;
     transition: background-color 0.2s;
+    display: inline-flex;
+    align-items: center;
 
-    &:hover:not(:disabled) {
-        // FIX: Replaced deprecated darken() with color.adjust()
-        background-color: color.adjust($primary-color, $lightness: -8%);
+    .fas {
+        margin-right: 8px;
     }
 
-    &:disabled {
-        background-color: #aaa;
-        cursor: not-allowed;
-    }
-}
-
-.validation-error {
-    color: $error-color;
-    margin-top: -30px;
-    margin-bottom: 30px;
-    font-size: 0.9em;
-
-    p {
-        margin: 5px 0;
-        padding-left: 10px;
+    &:hover {
+        background-color: darken($accent-color, 10%);
     }
 }
 
-/* =========================================================
-   2. Loading and Error States
-   ========================================================= */
+.action-btn {
+    color: $primary-color;
+    cursor: pointer;
+    font-size: 0.95em;
+    text-decoration: none;
 
-.loading-container {
-    text-align: center;
-    padding: 50px 0;
-    font-size: 1.1em;
-    color: #777;
+    &:hover {
+        color: $accent-color;
+        text-decoration: underline;
+    }
+
+    .fas {
+        margin-right: 5px;
+    }
 }
 
-.spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid $accent-color;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 10px;
-}
-
+/* Keyframe for Loading Spinner */
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-.api-error {
-    padding: 15px;
-    margin-bottom: 25px;
-    border-radius: 6px;
-    background-color: #f8d7da;
-    color: $error-color;
-    border: 1px solid $error-color;
-    font-weight: 500;
-}
-
-/* =========================================================
-   3. Shipments Grid
-   ========================================================= */
-
-.shipments-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
-}
-
-.shipment-card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.3s, transform 0.3s;
-
-    &:hover {
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        transform: translateY(-3px);
-    }
-
-    a {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-        padding: 20px;
-    }
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-
-    .id {
-        font-weight: 600;
-        color: $primary-color;
-        font-size: 1.1em;
-    }
-
-    .details p {
-        margin: 5px 0;
-        font-size: 0.9em;
-        color: #555;
-    }
-}
-
-/* =========================================================
-   4. Status Styling (Shared)
-   ========================================================= */
-
-.status {
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-size: 0.85em;
-    font-weight: 600;
-    color: white;
-
-    &.status-delivered { background-color: $delivered-color; }
-    &.status-in { background-color: $transit-color; }
-    &.status-out {
-        background-color: $out-for-delivery-color;
-        color: #333;
-    }
-    &.status-created { background-color: gray; }
-}
-
-.no-data {
-    grid-column: 1 / -1; /* Center across the whole grid */
-    text-align: center;
-    padding: 50px 0;
-    font-size: 1.2em;
-    color: #999;
 }

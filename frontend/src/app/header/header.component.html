@@ -1,8 +1,13 @@
 <header class="main-header">
   <nav class="navbar">
     <div class="logo">
-      <a routerLink="/dashboard" class="logo-link">
-        <img src="assets/truck-courier.jpg" alt="Astringer Logo" class="logo-icon">
+      <a routerLink="/dashboard"
+         class="logo-link"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}">
+
+        <img src="assets/images/White-Box.png" alt="Astringer Logo" class="logo-icon">
+
         {{ appTitle }}
       </a>
     </div>

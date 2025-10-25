@@ -1,7 +1,8 @@
-// src/app/header/header.component.ts (NEW FILE)
+// src/app/header/header.component.ts (FIXED)
 
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+// 💥 FIX: RouterLinkActive is needed because it's used on the <a> tags in the HTML
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -9,12 +10,13 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink
+    RouterLink,
+    RouterLinkActive, // ⬅️ ADDED: Essential for 'active' class styling
 ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  // 💥 FIX: Define the properties needed by the HTML template
+
   appTitle = 'Astringer Logistics';
 }
