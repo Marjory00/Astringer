@@ -1,34 +1,95 @@
 <div class="settings-container">
-  <h1><i class="fas fa-cog"></i> User Settings & Preferences</h1>
-  <p class="description">Manage your profile information and application settings.</p>
+  <h1 class="page-header">⚙️ Application Settings</h1>
 
-  <div class="settings-section">
-    <h2>Profile Information</h2>
-    <div class="setting-item">
-      <label for="user-name">Full Name</label>
-      <input id="user-name" type="text" [value]="userName">
-    </div>
-    <div class="setting-item">
-      <label for="user-email">Email Address</label>
-      <input id="user-email" type="email" [value]="email">
-    </div>
-    <button class="save-button">Save Profile</button>
+  <div class="settings-tabs">
+    <button
+      [class.active]="activeTab === 'general'"
+      (click)="setActiveTab('general')">
+      General
+    </button>
+    <button
+      [class.active]="activeTab === 'notifications'"
+      (click)="setActiveTab('notifications')">
+      Notifications
+    </button>
+    <button
+      [class.active]="activeTab === 'data'"
+      (click)="setActiveTab('data')">
+      Data Management
+    </button>
   </div>
 
-  <div class="settings-section">
-    <h2>App Preferences</h2>
-    <div class="setting-item">
-      <label for="theme">Dashboard Theme</label>
-      <select id="theme">
-        <option>Light (Default)</option>
-        <option>Dark Mode</option>
-        <option>Logistics Orange</option>
-      </select>
-    </div>
-    <div class="setting-item switch-item">
-      <label>Enable Real-Time Notifications</label>
-      <input type="checkbox" checked>
-    </div>
-    <button class="save-button">Save Preferences</button>
+  <div class="settings-content">
+    <form (ngSubmit)="saveSettings()">
+
+      <section *ngIf="activeTab === 'general'">
+        <h2>User Interface Preferences</h2>
+
+        <div class="setting-group">
+          <label for="theme">Application Theme:</label>
+          <select id="theme" [(ngModel)]="theme" name="theme">
+            <option value="light">Light (Default)</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+
+        <div class="setting-group">
+          <label for="itemsPerPage">Table Rows Per Page:</label>
+          <input type="number" id="itemsPerPage" [(ngModel)]="itemsPerPage" name="itemsPerPage" min="10" max="100">
+        </div>
+
+        <div class="setting-group">
+          <label for="dateFormat">Date Format:</label>
+          <select id="dateFormat" [(ngModel)]="dateFormat" name="dateFormat">
+            <option value="MM/dd/yyyy">MM/dd/yyyy (US)</option>
+            <option value="dd/MM/yyyy">dd/MM/yyyy (EU)</option>
+            <option value="yyyy-MM-dd">yyyy-MM-dd (ISO)</option>
+          </select>
+        </div>
+      </section>
+
+      <section *ngIf="activeTab === 'notifications'">
+        <h2>Alert Configuration</h2>
+
+        <div class="setting-group checkbox-group">
+          <input type="checkbox" id="emailAlerts" [(ngModel)]="emailAlerts" name="emailAlerts">
+          <label for="emailAlerts">Enable Shipment Status Email Alerts</label>
+        </div>
+
+        <div class="setting-group checkbox-group">
+          <input type="checkbox" id="smsAlerts" [(ngModel)]="smsAlerts" name="smsAlerts">
+          <label for="smsAlerts">Enable SMS Alerts (Delivery Exceptions)</label>
+        </div>
+
+        <div class="setting-group checkbox-group">
+          <input type="checkbox" id="desktopNotifications" [(ngModel)]="desktopNotifications" name="desktopNotifications">
+          <label for="desktopNotifications">Show In-App Desktop Notifications</label>
+        </div>
+      </section>
+
+      <section *ngIf="activeTab === 'data'">
+        <h2>Data Tools</h2>
+
+        <div class="setting-group action-group">
+          <p>Last data export: <strong>{{ lastExportDate | date: 'medium' }}</strong></p>
+          <button type="button" class="btn-action" (click)="exportData()">
+            <i class="fas fa-file-export"></i> Export All Shipment Data (CSV)
+          </button>
+        </div>
+
+        <div class="setting-group action-group">
+          <p>Clear local storage and cache to resolve display issues.</p>
+          <button type="button" class="btn-warn" (click)="clearCache()">
+            <i class="fas fa-trash-alt"></i> Clear Local Cache
+          </button>
+        </div>
+      </section>
+
+      <div class="save-actions">
+        <button type="submit" class="btn-primary-save">
+          <i class="fas fa-save"></i> Save Preferences
+        </button>
+      </div>
+    </form>
   </div>
 </div>

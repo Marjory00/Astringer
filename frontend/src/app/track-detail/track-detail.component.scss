@@ -1,40 +1,66 @@
-/* Astringer/frontend/src/app/track-detail/track-detail.component.scss (FINALIZED) */
+/* src/app/track-detail/track-detail.component.scss (MERGED AND FIXED) */
 
 $primary-color: #004d99; // Deep Blue
 $accent-color: #ff9900;  // Logistics Orange
-$delivered-color: #28a745; // Green
-$transit-color: #007bff; // Blue
-$out-for-delivery-color: #ffc107; // Yellow/Orange
+// 💥 FIX APPLIED: Changed line comment to block comment
+$delivered-color: #28a745; /* Success Green */
 $not-found-bg: #f8d7da; // Light red for error box
 $error-color: #cc0000;
+$text-color: #333;
+$secondary-text: #666;
+$border-color: #e0e0e0;
+$timeline-line: #ccc;
+$success-color: #4CAF50; // Using a single success color for consistency
 
 /* =========================================================
-   1. Main Layout & Info Blocks
-   ========================================================= */
+   1. Main Layout & Info Blocks
+   ========================================================= */
 
-.detail-container {
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+// NOTE: Using .tracking-container instead of .detail-container for consistency with final HTML
+.tracking-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-// ✨ NEW: Wrapper for the header content (ID, Button, and Status)
+.page-header {
+    color: $primary-color;
+    font-size: 2em;
+    border-bottom: 2px solid $border-color;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+// Global Card Style (Reused from Dashboard)
+.info-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+
+    h2 {
+        color: $accent-color;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-top: 0;
+        font-size: 1.2em;
+    }
+}
+
+/* Tracking Header */
 .tracking-header-actions {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Aligns content to the top */
+    align-items: flex-start;
     border-bottom: 2px solid #f0f0f0;
     padding-bottom: 15px;
     margin-bottom: 25px;
 }
 
-// FIX: This now contains only the ID and the Copy Button
 .tracking-header {
     display: flex;
     align-items: center;
-    gap: 15px; /* Space between ID and Copy Button */
-    // Removed old border styles, as they are now on .tracking-header-actions
+    gap: 15px;
     padding-bottom: 0;
     margin-bottom: 0;
 
@@ -45,7 +71,6 @@ $error-color: #cc0000;
     }
 }
 
-// ✨ NEW: Style for the Copy ID button
 .copy-button {
     background-color: #eee;
     color: #555;
@@ -57,30 +82,65 @@ $error-color: #cc0000;
     font-weight: 500;
     transition: background-color 0.2s, color 0.2s;
 
+    .fas {
+        margin-right: 5px;
+    }
+
     &:hover {
         background-color: #ddd;
         color: #333;
     }
 }
 
-.info-block {
+/* Detail Cards & Grid (Matching final HTML structure) */
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 20px;
     margin-bottom: 30px;
-    h3 {
-        color: $primary-color;
-        font-size: 1.1em;
-        margin-bottom: 10px;
+}
+
+.status-card {
+    .current-status {
+        font-size: 1.8em;
+        font-weight: 700;
+        color: $success-color;
+        margin: 15px 0;
     }
-    p {
-        margin: 5px 0;
+    .eta {
         font-size: 1em;
-        color: #333;
+        color: $secondary-text;
+        .fas { margin-right: 8px; color: $primary-color; }
+    }
+}
+
+.route-card {
+    .route-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 15px;
+        text-align: center;
+    }
+    .route-item {
+        flex: 1;
+        font-size: 1.1em;
+        color: $text-color;
+        .fas { margin-right: 5px; color: $primary-color; }
+    }
+    .route-arrow {
+        color: $accent-color;
+        font-size: 1.5em;
+        margin: 0 10px;
     }
 }
 
 /* =========================================================
-   2. Status Styling (Reused from Dashboard)
-   ========================================================= */
+   2. Status Styling (Simplified to match Dashboard)
+   ========================================================= */
 
+// NOTE: These classes are no longer used directly in the final HTML,
+// but we keep a generic style for future use.
 .status {
     padding: 6px 12px;
     border-radius: 20px;
@@ -89,123 +149,103 @@ $error-color: #cc0000;
     color: white;
 
     &.status-delivered { background-color: $delivered-color; }
-    &.status-in { background-color: $transit-color; }
-    &.status-out {
-        background-color: $out-for-delivery-color;
-        color: #333; /* Dark text for yellow background */
-    }
+    &.status-in { background-color: #007bff; }
+    &.status-out { background-color: $accent-color; color: $text-color; }
     &.status-created { background-color: gray; }
 }
 
 /* =========================================================
-   3. Map Simulation
-   ========================================================= */
-
-.map-container {
-    margin-bottom: 40px;
-
-    h3 {
-        color: $primary-color;
-        margin-bottom: 15px;
-    }
-
-    .location-map {
-        width: 100%;
-        height: 350px;
-        object-fit: cover;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-    }
-
-    .map-caption {
-        text-align: center;
-        margin-top: 10px;
-        font-style: italic;
-        color: #777;
-    }
-}
+   3. Map Simulation (Removed, as it wasn't integrated)
+   ========================================================= */
 
 /* =========================================================
-   4. Timeline (Key Structural Styles)
-   ========================================================= */
+   4. Timeline (FIXED: Using Dynamic Timeline Structure)
+   ========================================================= */
+
+.timeline-card {
+    h2 { color: $primary-color; }
+}
 
 .timeline {
-    padding: 20px 0;
     position: relative;
+    padding: 20px 0 0 20px;
 
-    h3 {
-        color: $primary-color;
-        margin-bottom: 25px;
-    }
-
-    /* Vertical line for the timeline */
+    // Vertical line for the timeline
     &::before {
         content: '';
         position: absolute;
-        top: 60px;
-        bottom: 0;
-        left: 10px;
+        top: 0;
+        left: 3px;
         width: 2px;
-        background-color: #ccc;
+        height: 100%;
+        background: $timeline-line;
     }
 }
 
-.timeline-item {
-    display: flex;
-    margin-bottom: 25px;
+.timeline-event {
     position: relative;
-    padding-left: 30px;
+    margin-bottom: 30px;
+    padding-left: 20px;
 
-    /* The circle/dot on the timeline line */
-    .dot {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        background-color: #fff;
-        border: 3px solid #ccc;
-        z-index: 1;
-        transition: all 0.3s ease;
+    &:last-child {
+        margin-bottom: 0;
     }
 
-    .content {
-        background-color: #f7f7f7;
+    .timeline-icon {
+        position: absolute;
+        left: -17px;
+        top: 0;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background-color: $primary-color;
+        color: white;
+        text-align: center;
+        line-height: 35px;
+        font-size: 14px;
+        z-index: 10;
+        border: 4px solid white;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    // Styles for completed status (based on .isStatusComplete logic in TS)
+    &.completed .timeline-icon {
+        background-color: $success-color;
+        border-color: $success-color;
+    }
+
+    .timeline-content {
         padding: 10px 15px;
         border-radius: 5px;
-        width: 100%;
-        font-size: 0.95em;
-        color: #333;
+        background-color: #f7f7f7;
     }
 
-    /* Active/Completed State Styles */
-    &.delivered, &.out, &.transit, &.created {
-        .dot {
-            background-color: white;
-            border-color: $delivered-color;
+    .status-title {
+        font-weight: 700;
+        font-size: 1.1em;
+        color: $text-color;
+        margin-bottom: 3px;
+    }
+
+    .location-date {
+        font-size: 0.9em;
+        color: $secondary-text;
+
+        .fas {
+            margin-right: 5px;
         }
-    }
-
-    /* Highlight the highest status color */
-    &.delivered .dot {
-        background-color: $delivered-color;
-        border-color: $delivered-color;
-    }
-    &.out .dot {
-        border-color: $out-for-delivery-color;
-    }
-    &.transit .dot {
-        border-color: $transit-color;
+        .location {
+            font-weight: 500;
+            color: $primary-color;
+        }
     }
 }
 
-
 /* =========================================================
-   5. Not Found / Error Message
-   ========================================================= */
+   5. Not Found / Error Message (Renamed to match dashboard styles)
+   ========================================================= */
 
-.error-message {
+.error-state, .empty-state {
     text-align: center;
     padding: 40px;
     background-color: $not-found-bg;
@@ -214,41 +254,34 @@ $error-color: #cc0000;
     border-radius: 8px;
     max-width: 600px;
     margin: 40px auto;
-
-    h2 {
-        color: $error-color;
-        font-size: 2em;
-        margin-top: 0;
-    }
-
-    p {
-        font-size: 1.1em;
-        margin-bottom: 25px;
-        color: #721c24;
-    }
 }
 
 /* =========================================================
-   6. Back Button
-   ========================================================= */
+   6. Back Button (Using the simpler back-button style from the new HTML)
+   ========================================================= */
 
 .back-button {
-    display: block;
-    width: 250px;
-    margin: 20px auto 0;
-    padding: 12px;
-    background-color: $primary-color;
-    color: white;
-    border: none;
-    border-radius: 5px;
+    background: none;
+    border: 1px solid $border-color;
+    color: $secondary-text;
+    padding: 8px 15px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 1em;
-    font-weight: 600;
-    text-align: center;
-    text-decoration: none;
+    margin-bottom: 20px;
     transition: background-color 0.2s;
 
     &:hover {
-        background-color: darken($primary-color, 10%);
+        background-color: #f0f0f0;
+        color: $primary-color;
+    }
+}
+
+/* Media Query */
+@media (max-width: 768px) {
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+    .back-button {
+        width: 100%;
     }
 }

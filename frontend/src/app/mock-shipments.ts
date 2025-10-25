@@ -1,28 +1,24 @@
-// src/app/shipment.service.ts (FIXED: Using Mock Data)
+// src/app/shipment.service.ts (FINALIZED)
 
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { delay, catchError } from 'rxjs/operators';
+import { delay, switchMap } from 'rxjs/operators'; // 💥 Using switchMap for chaining
 import { Shipment } from './shipment.model';
-import { MOCK_SHIPMENTS } from './mock-shipments'; // 💥 New mock data import
+import { MOCK_SHIPMENTS } from './mock-shipments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShipmentService {
-  // 💥 Removed HttpClient dependency and apiUrl since we are using local data
 
-  // Simulated network latency
   private readonly MOCK_LATENCY = 300;
 
   constructor() { }
 
   /**
    * Retrieves all shipments from the mock data.
-   * @returns An Observable of all Shipment objects.
    */
   getAllShipments(): Observable<Shipment[]> {
-    // Simulate an HTTP GET call
     return of(MOCK_SHIPMENTS).pipe(
       delay(this.MOCK_LATENCY)
     );
@@ -30,22 +26,25 @@ export class ShipmentService {
 
   /**
    * Retrieves a single shipment by its ID or Tracking ID.
+   * 💥 FIX: Refactored logic to explicitly check for null and use throwError
    * @param id The shipment ID (internal or tracking ID).
-   * @returns An Observable of the found Shipment or an error.
    */
   getShipmentById(id: string): Observable<Shipment> {
     const shipment = MOCK_SHIPMENTS.find(
       s => s.id === id || s.trackingId === id
     );
 
-    // Simulate network delay and handle not found error
+    // 1. Simulate network delay first
     return of(shipment).pipe(
       delay(this.MOCK_LATENCY),
-      catchError(() => {
-        if (!shipment) {
+      // 2. Use switchMap to check the result after the delay
+      switchMap(result => {
+        if (!result) {
+          // If not found, immediately throw an error simulating a 404
           return throwError(() => new Error(`Shipment with ID ${id} not found.`));
         }
-        return of(shipment as Shipment); // Should not happen, but satisfies type checking
+        // If found, return the shipment as a new observable
+        return of(result as Shipment);
       })
     );
   }
@@ -53,7 +52,6 @@ export class ShipmentService {
   /**
    * Searches shipments by partial tracking ID or destination.
    * @param query The search term.
-   * @returns An Observable of filtered Shipment objects.
    */
   searchShipments(query: string): Observable<Shipment[]> {
     const term = query.toLowerCase().trim();

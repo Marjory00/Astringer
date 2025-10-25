@@ -1,78 +1,150 @@
-$primary-color: #004d99;
-$accent-color: #ff9900;
+/* src/app/settings/settings.component.scss */
+
+$primary-color: #004d99; // Deep Blue
+$accent-color: #ff9900;  // Logistics Orange
+$border-color: #e0e0e0;
+$success-color: #28a745;
+$warning-color: #dc3545; // Red for warnings/delete
 
 .settings-container {
-    background-color: white;
-    padding: 30px;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background: white;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    max-width: 700px;
-    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.description {
-    color: #666;
-    margin-bottom: 30px;
+.page-header {
+    color: $primary-color;
+    font-size: 2em;
+    border-bottom: 2px solid $border-color;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
 }
 
-.settings-section {
-    padding: 20px 0;
-    border-bottom: 1px solid #eee;
-
-    &:last-child {
-        border-bottom: none;
-    }
-
-    h2 {
-        color: $primary-color;
-        margin-top: 0;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid lighten($primary-color, 40%);
-    }
-}
-
-.setting-item {
+/* Tab Navigation */
+.settings-tabs {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
+    border-bottom: 1px solid $border-color;
+    margin-bottom: 20px;
 
-    &.switch-item {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
+    button {
+        background: none;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.1em;
+        font-weight: 500;
+        cursor: pointer;
+        color: #666;
+        border-bottom: 3px solid transparent;
+        transition: color 0.2s, border-bottom 0.2s;
+
+        &:hover {
+            color: $primary-color;
+        }
+
+        &.active {
+            color: $primary-color;
+            border-bottom-color: $accent-color;
+            font-weight: 600;
+        }
+    }
+}
+
+/* Content Area */
+h2 {
+    color: $primary-color;
+    font-size: 1.4em;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.setting-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #f0f0f0;
+
+    &:last-of-type {
+        border-bottom: none;
     }
 
     label {
         font-weight: 500;
-        margin-bottom: 5px;
         color: #333;
     }
 
-    input[type="text"],
-    input[type="email"],
+    input[type="number"],
     select {
-        padding: 10px 12px;
-        border: 1px solid #ccc;
+        padding: 8px;
+        border: 1px solid $border-color;
         border-radius: 4px;
-        font-size: 1em;
-        background-color: #f9f9f9;
+        width: 150px;
     }
 }
 
-.save-button {
+/* Checkbox specific styling */
+.checkbox-group {
+    justify-content: flex-start;
+    gap: 15px;
+
+    label {
+        order: 2; /* Put label after checkbox */
+    }
+
+    input[type="checkbox"] {
+        order: 1;
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Action buttons */
+.btn-primary-save, .btn-action, .btn-warn {
     padding: 10px 20px;
-    background-color: $accent-color;
-    color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
-    margin-top: 15px;
     transition: background-color 0.2s;
 
-    &:hover {
-        background-color: darken($accent-color, 10%);
+    .fas {
+        margin-right: 8px;
     }
+}
+
+.btn-primary-save {
+    background-color: $success-color;
+    color: white;
+    margin-top: 20px;
+
+    &:hover {
+        background-color: darken($success-color, 10%);
+    }
+}
+
+.btn-action {
+    background-color: $primary-color;
+    color: white;
+
+    &:hover {
+        background-color: darken($primary-color, 10%);
+    }
+}
+
+.btn-warn {
+    background-color: $warning-color;
+    color: white;
+
+    &:hover {
+        background-color: darken($warning-color, 10%);
+    }
+}
+
+.action-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
 }

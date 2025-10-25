@@ -1,30 +1,43 @@
-<header class="main-header">
-  <nav class="navbar">
-    <div class="logo">
-      <a routerLink="/dashboard"
-         class="logo-link"
-         routerLinkActive="active"
-         [routerLinkActiveOptions]="{exact: true}">
+<header class="app-header">
 
-        <img src="assets/images/White-Box.png" alt="Astringer Logo" class="logo-icon">
+  <div class="header-brand">
+    <a [routerLink]="['/dashboard']"
+       class="logo-link"
+       routerLinkActive="active"
+       [routerLinkActiveOptions]="{exact: true}">
 
-        {{ appTitle }}
-      </a>
-    </div>
+      <i class="fas fa-truck logo-icon"></i>
+      <span class="app-title">{{ appTitle }}</span>
+    </a>
+  </div>
 
-    <div class="nav-links">
-      <a routerLink="/dashboard" routerLinkActive="active" title="Dashboard">
-        <i class="fas fa-truck"></i> Dashboard
-      </a>
-      <a routerLink="/planning" routerLinkActive="active" title="Plan New Shipment">
-        <i class="fas fa-box-open"></i> New Shipment
-      </a>
-      <a routerLink="/reporting" routerLinkActive="active" title="Reporting">
-        <i class="fas fa-chart-line"></i> Reporting
-      </a>
-      <a routerLink="/settings" routerLinkActive="active" title="Settings">
-        <i class="fas fa-cog"></i> Settings
-      </a>
-    </div>
+  <nav class="header-nav">
+    <ul>
+      <li *ngFor="let item of navItems">
+        <a
+          [routerLink]="[item.path]"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="nav-item">
+          <i class="fas" [ngClass]="item.icon"></i>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
   </nav>
+
+  <div class="header-search">
+    <form (ngSubmit)="onTrackSubmit()">
+      <input
+        type="text"
+        placeholder="Quick Track ID..."
+        [(ngModel)]="trackingId"
+        name="trackingId"
+        required>
+      <button type="submit" [disabled]="!trackingId">
+        <i class="fas fa-search"></i>
+      </button>
+    </form>
+  </div>
+
 </header>

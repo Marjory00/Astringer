@@ -1,47 +1,28 @@
-/* Astringer/frontend/src/app/footer/footer.component.scss (FIXED) */
+/* src/app/footer/footer.component.scss */
 
 $primary-color: #004d99; // Deep Blue
-$accent-color: #ff9900; // Logistics Orange
-$text-color: #bbbbbb; // Lighter text for a dark background
-$border-color: #1a60ac; // Slightly lighter primary color for the top border
+$light-bg: #f7f9fc;
+$secondary-text: #666;
 
-footer {
-    background-color: $primary-color;
-    color: $text-color;
-    padding: 20px 30px;
-    border-top: 1px solid $border-color;
+.main-footer {
+  background-color: $light-bg;
+  border-top: 1px solid #e0e0e0;
+  padding: 15px 30px;
+  text-align: center;
+  font-size: 0.85em;
+  color: $secondary-text;
+  flex-shrink: 0; // Ensures the footer doesn't shrink in flex layouts
 
-    // FIX: Ensure it spans the full width of its parent (:host in app.component.scss)
-    width: 100%;
-    box-sizing: border-box;
-
-    // FIX: Ensure text is centered
-    text-align: center;
-
-    font-size: 0.9em;
-    margin-top: auto; /* Works with the Flexbox Sticky Footer in app.component.scss */
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-
-    // Ensure the text color is correct (overrides any accidental global red)
-    color: $text-color;
-}
-
-p {
+  p {
     margin: 5px 0;
-}
+  }
 
-/* Styling for links within the footer */
-a {
-    color: $accent-color; /* Use the accent color for visibility */
+  a {
+    color: $primary-color;
     text-decoration: none;
-    transition: color 0.2s;
 
     &:hover {
-        color: lighten($accent-color, 10%);
-        text-decoration: underline;
+      text-decoration: underline;
     }
+  }
 }

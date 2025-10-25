@@ -1,10 +1,12 @@
-// src/app/app.component.ts (FINAL FIXED VERSION) 🚀
+// src/app/app.component.ts (FINALIZED with Footer import)
 
 import { Component } from '@angular/core';
-// ⚠️ FIX: You need RouterLinkActive for the routerLinkActive directive used in the footer.
-import { RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { RouterOutlet, RouterLink } from '@angular/router';
 import { HeaderComponent } from "./header/header.component";
+import { NotificationComponent } from "./notification/notification.component";
+// 💥 New Import
+import { FooterComponent } from "./footer/footer.component";
 
 @Component({
   selector: 'app-root',
@@ -13,15 +15,13 @@ import { HeaderComponent } from "./header/header.component";
     CommonModule,
     RouterOutlet,
     RouterLink,
-    HeaderComponent
-],
+    HeaderComponent,
+    NotificationComponent,
+    FooterComponent // 💥 FooterComponent added to imports
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  // ⚠️ appTitle is no longer needed here if it's only used in HeaderComponent
-  // However, we keep currentYear because it's used in the footer.
-  // appTitle = 'Astringer Logistics'; // Removed as it's only needed by HeaderComponent
-
-  currentYear = new Date().getFullYear();
+  // 💥 Removed currentYear, as it is now managed by FooterComponent
 }

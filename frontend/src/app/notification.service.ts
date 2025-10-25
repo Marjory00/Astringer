@@ -1,33 +1,64 @@
-// Astringer/frontend/src/app/notification.service.ts (FINALIZED)
+// src/app/notification.service.ts (FINALIZED)
 
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, timer } from 'rxjs';
+import { BehaviorSubject, timer, Subscription } from 'rxjs';
 
-interface Notification {
+// Updated Model to include a unique ID
+export interface Notification {
+  id: number;
   message: string;
-  type: 'success' | 'error' | 'info';
+  type: 'success' | 'error' | 'info' | 'warning'; // Added 'warning' type for flexibility
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-  private notificationSubject = new BehaviorSubject<Notification>({ message: '', type: 'info' });
+  // Use a unique dummy ID for the initial state so the first real notification is always emitted.
+  private notificationSubject = new BehaviorSubject<Notification>({ id: -1, message: '', type: 'info' });
   notification$ = this.notificationSubject.asObservable();
 
+  private timerSubscription: Subscription | null = null;
+  private nextId = 0;
   private readonly DEFAULT_DURATION = 4000; // 4 seconds
 
-  show(message: string, type: 'success' | 'error' | 'info', duration: number = this.DEFAULT_DURATION) {
-    // 1. Set the new notification
-    this.notificationSubject.next({ message, type });
+  show(message: string, type: 'success' | 'error' | 'info' | 'warning', duration: number = this.DEFAULT_DURATION) {
+    // 1. Unsubscribe any existing timer to prevent premature clearing
+    if (this.timerSubscription) {
+        this.timerSubscription.unsubscribe();
+    }
 
-    // 2. Clear the notification after the duration
-    timer(duration).subscribe(() => {
-      this.clear();
+    // 2. Set the new notification with a unique ID
+    const newNotification: Notification = {
+        id: this.nextId++,
+        message,
+        type
+    };
+    this.notificationSubject.next(newNotification);
+
+    // 3. Clear the notification after the duration
+    this.timerSubscription = timer(duration).subscribe(() => {
+        this.clear();
+        this.timerSubscription = null;
     });
   }
 
   clear() {
-    this.notificationSubject.next({ message: '', type: 'info' });
+    // Reset to a known empty state. The component should hide the notification when message is empty.
+    this.notificationSubject.next({ id: -1, message: '', type: 'info' });
+  }
+
+  // Convenience methods (optional, but helpful)
+  success(message: string, duration?: number): void {
+    this.show(message, 'success', duration);
+  }
+  error(message: string, duration?: number): void {
+    this.show(message, 'error', duration);
+  }
+  info(message: string, duration?: number): void {
+    this.show(message, 'info', duration);
+  }
+  warning(message: string, duration?: number): void {
+    this.show(message, 'warning', duration);
   }
 }

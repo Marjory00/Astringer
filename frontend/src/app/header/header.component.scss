@@ -1,35 +1,42 @@
-/* Astringer/frontend/src/app/header/header.component.scss */
+/* src/app/header/header.component.scss (FINALIZED) */
 
-$primary-color: #004d99; // Deep Blue
-$accent-color: #ff9900; // Logistics Orange
-$text-color: #f7f7f7; // Light gray/off-white
+$primary-color: #004d99;   // Deep Blue
+$accent-color: #ff9900;    // Logistics Orange
+$text-color: #f7f7f7;      // Light gray/off-white (Used for link text and logo)
+$light-bg: #f7f9fc;        // Very light background for search input
+$secondary-text: #e0e0e0;  // Light gray for subtle elements
 
-/* 1. Header Container and Navbar Layout */
+/* 1. Header Container and Layout */
 
-.main-header {
+.app-header { // 💥 FIX: Renamed from .main-header to align with TS/HTML
     background-color: $primary-color;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: $text-color;
+    padding: 0 30px; // Padding adjusted to use padding below instead of fixed height
+    height: 70px; // Set a fixed height for better sticky consistency
 
-.navbar {
-    max-width: 1200px;
-    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 30px;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    // Center content within a max-width container, similar to your .navbar idea
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%; // Ensure it spans the container width
 }
 
 /* 2. Logo/Title Area */
 
-.logo {
+.header-brand { // 💥 FIX: Renamed from .logo to align with TS/HTML
+    flex-shrink: 0;
     display: flex;
     align-items: center;
 
-    .logo-link { /* Link wraps the image and title */
+    .logo-link {
         color: $text-color;
         text-decoration: none;
         font-size: 1.5em;
@@ -42,39 +49,152 @@ $text-color: #f7f7f7; // Light gray/off-white
             color: $accent-color;
         }
     }
+
+    // Using the icon-based logo (fa-truck) from the final HTML
+    .logo-icon {
+        color: $accent-color;
+        font-size: 1.8em;
+        margin-right: 10px;
+    }
+
+    .app-title {
+        font-size: 1.2em;
+        font-weight: 700;
+        color: $text-color;
+    }
 }
 
-.logo-icon {
-    width: 65px;
-    height: 70px;
-    margin-right: 10px;
+/* 3. Navigation Links Area (Using the TS/HTML structure with ul/li) */
+
+.header-nav { // 💥 FIX: Renamed from .nav-links to align with TS/HTML
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+    }
+
+    li {
+        margin: 0 5px;
+    }
+
+    .nav-item { // 💥 Targetting the .nav-item class from the HTML loop
+        color: $secondary-text; // Lighter text color for standard links
+        text-decoration: none;
+        font-weight: 500;
+        padding: 10px 15px;
+        border-radius: 4px;
+        transition: background-color 0.2s, color 0.2s;
+
+        display: flex;
+        align-items: center;
+        height: 70px; // Match header height
+        border-bottom: 3px solid transparent; // Preparation for active state
+        box-sizing: border-box;
+
+        .fas { /* Icon inside the link */
+            margin-right: 5px;
+            font-size: 1.1em;
+        }
+
+        &:hover {
+            background-color: lighten($primary-color, 5%);
+            color: $text-color;
+        }
+
+        &.active {
+            // Your active style for better visual feedback
+            background-color: $primary-color;
+            color: $text-color;
+            border-bottom: 3px solid $accent-color; // Highlight with accent color
+            font-weight: 700;
+        }
+    }
+}
+
+/* 4. Quick Track Search (Adopted from previous styles) */
+
+.header-search {
     flex-shrink: 0;
+
+    form {
+        display: flex;
+        background-color: lighten($primary-color, 10%); // Slightly lighter background
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    input {
+        border: none;
+        padding: 8px 10px;
+        font-size: 0.9em;
+        background: transparent;
+        width: 150px;
+        color: $text-color;
+
+        &::placeholder {
+            color: $secondary-text;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    button {
+        background-color: $accent-color; // Use accent color for button
+        color: $primary-color;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover:not(:disabled) {
+            background-color: darken($accent-color, 10%);
+        }
+
+        &:disabled {
+            background-color: $secondary-text;
+            cursor: not-allowed;
+            color: #666;
+        }
+    }
 }
 
-/* 3. Navigation Links Area */
-
-.nav-links a {
-    // FIX: Changed default color from #c7d2e0 to white for guaranteed visibility
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 10px 15px;
-    margin-left: 10px;
-    border-radius: 4px;
-    transition: background-color 0.2s, color 0.2s;
-
-    .fas { /* Icon inside the link */
-        margin-right: 5px;
+/* Mobile Styling */
+@media (max-width: 768px) {
+    .app-header {
+        padding: 0 10px;
+        height: auto;
+        flex-wrap: wrap; // Allow items to wrap
     }
 
-    &:hover,
-    &.active {
-        background-color: darken($primary-color, 5%);
-        color: white;
+    .header-brand,
+    .header-search {
+        flex-basis: 50%;
+        margin: 10px 0;
     }
 
-    &.active {
-        border-bottom: 3px solid $accent-color;
-        padding-bottom: 7px;
+    .header-nav {
+        order: 3; // Push navigation below brand and search on mobile
+        flex-basis: 100%;
+
+        ul {
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        .nav-label {
+            display: none; // Only show icons on mobile
+        }
+
+        .nav-item {
+            padding: 10px 5px;
+            height: 40px;
+        }
     }
 }

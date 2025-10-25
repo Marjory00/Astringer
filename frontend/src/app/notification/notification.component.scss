@@ -1,41 +1,85 @@
-/* Astringer/frontend/src/app/notification/notification.component.scss (FINALIZED) */
+/* src/app/notification/notification.component.scss */
 
-$success-color: #28a745;
-$error-color: #dc3545;
-$info-color: #007bff;
+$primary-color: #004d99;
+$success-color: #4CAF50;
+$error-color: #F44336;
+$warning-color: #FFC107;
+$info-color: $primary-color; // Deep Blue
 
-.notification {
-    position: fixed;
-    top: 65px; /* Adjust slightly higher for cleaner placement below header */
-    right: 20px;
-    padding: 12px 20px;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    color: white;
-    font-weight: 500;
-    z-index: 1000;
-    max-width: 300px; /* Limits the width on large screens */
+.notification-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2000; /* Ensure it stays above all content */
+  display: flex;
+  flex-direction: column-reverse; /* New toasts appear at the bottom */
+  gap: 10px;
+}
 
-    /* V--- Initial Hidden State (Fix for smooth transitions) V */
+.toast-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  min-width: 280px;
+  max-width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: white;
+  opacity: 0;
+  animation: slideIn 0.3s forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
     opacity: 0;
-    transform: translateY(-20px);
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-
-    /* V--- Active State (Applied when *ngIf renders the element) V */
-    &.ng-star-inserted {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
-.success {
-    background-color: $success-color;
+.toast-content {
+    display: flex;
+    align-items: center;
 }
 
-.error {
-    background-color: $error-color;
+.icon {
+  font-size: 1.2em;
+  margin-right: 10px;
 }
 
-.info {
-    background-color: $info-color;
+.dismiss-button {
+  background: none;
+  border: none;
+  color: inherit; /* Inherit text color from the toast */
+  font-size: 1em;
+  cursor: pointer;
+  margin-left: 15px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+/* Type Styles */
+.toast-success {
+  background-color: $success-color;
+}
+
+.toast-error {
+  background-color: $error-color;
+}
+
+.toast-warning {
+  background-color: $warning-color;
+  color: #333; /* Dark text for yellow background */
+}
+
+.toast-info {
+  background-color: $info-color;
 }

@@ -1,71 +1,78 @@
-<div class="detail-container">
+<div class="tracking-container">
 
-  <ng-container *ngIf="shipment$ | async as shipment; else notFound">
+  <h1 class="page-header"><i class="fas fa-search-location"></i> Tracking Details</h1>
+  <button (click)="router.navigate(['/dashboard'])" class="back-button"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
 
-    <div class="tracking-header-actions">
-      <div class="tracking-header">
-        <h2>Shipment ID: {{ shipment.id }}</h2>
+  <div *ngIf="isLoading" class="loading-state">
+    <i class="fas fa-spinner fa-spin"></i> Loading tracking information for ID: {{ trackingId }}...
+  </div>
 
-        <button class="copy-button" (click)="copyTrackingId(shipment.id)">
-            📋 Copy ID
-        </button>
+  <div *ngIf="error && !isLoading" class="error-state">
+    <i class="fas fa-exclamation-triangle"></i> {{ error }}
+    <p *ngIf="trackingId">Please verify the Tracking ID: **{{ trackingId }}**</p>
+  </div>
+
+  <ng-container *ngIf="!isLoading && !error">
+    <div *ngIf="(shipment$ | async) as shipment; else notFound">
+
+      <div class="details-grid">
+
+        <div class="info-card status-card">
+          <h2>Current Status</h2>
+          <p class="current-status">{{ shipment.status }}</p>
+          <div class="eta">
+            <i class="fas fa-clock"></i>
+            ETA: **{{ shipment.estimatedDelivery | date:'fullDate' }}**
+          </div>
+          <button class="copy-button" (click)="copyTrackingId(shipment.id)">
+             <i class="fas fa-copy"></i> Copy Tracking ID
+          </button>
+        </div>
+
+        <div class="info-card route-card">
+          <h2>Route Information</h2>
+          <div class="route-info">
+            <div class="route-item current-location"><i class="fas fa-map-pin"></i> **Current:** {{ shipment.location || 'Unknown' }}</div>
+          </div>
+          <div class="route-info">
+            <div class="route-item origin"><i class="fas fa-map-marker-alt"></i> **Origin:** {{ shipment.origin }}</div>
+            <div class="route-arrow"><i class="fas fa-long-arrow-alt-right"></i></div>
+            <div class="route-item destination"><i class="fas fa-map-marked-alt"></i> **Destination:** {{ shipment.destination }}</div>
+          </div>
+        </div>
+
       </div>
 
-      <span class="status status-{{ shipment.status | statusClass }}">
-        {{ shipment.status }}
-      </span>
-    </div>
+      <div class="info-card timeline-card">
+        <h2>Tracking History for ID: {{ shipment.trackingId }}</h2>
 
-    <div class="info-block">
-      <h3>Current Status</h3>
-      <p>The parcel is currently at: **{{ shipment.location }}**</p>
-      <p>Expected arrival date: **{{ shipment.estimatedDelivery }}**</p>
-    </div>
+        <div class="timeline">
+          <div class="timeline-event"
+              [ngClass]="{ 'completed': isStatusComplete(event.status) }"
+              *ngFor="let event of getTrackingHistory(shipment.id)">
 
-    <div class="map-container">
-      <h3>Live Location</h3>
-      <img
-        [src]="'assets/maps/' + (shipment.location.split(',')[0] | lowercase) + '.png'"
-        alt="Map location for {{ shipment.location }}"
-        class="location-map"
-      >
-      <p class="map-caption">Last scanned location: {{ shipment.location }}</p>
-    </div>
+            <div class="timeline-icon">
+              <i class="fas" [ngClass]="getStatusIcon(event.status)"></i>
+            </div>
 
-    <div class="timeline">
-      <h3>Timeline</h3>
-
-      <div class="timeline-item delivered" *ngIf="(shipment.status | statusClass) === 'delivered'">
-        <div class="dot"></div>
-        <div class="content">Delivered to final destination. ({{ shipment.estimatedDelivery }})</div>
+            <div class="timeline-content">
+              <div class="status-title">{{ event.status }}</div>
+              <div class="location-date">
+                <i class="fas fa-calendar-alt"></i> {{ event.date | date:'medium' }}
+                <span class="location"> @ {{ event.location }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="timeline-item out"
-           *ngIf="(shipment.status | statusClass) === 'out' || (shipment.status | statusClass) === 'delivered'">
-        <div class="dot"></div>
-        <div class="content">Out for delivery in local area.</div>
-      </div>
-
-      <div class="timeline-item transit"
-           *ngIf="(shipment.status | statusClass) === 'in' || (shipment.status | statusClass) === 'out' || (shipment.status | statusClass) === 'delivered'">
-        <div class="dot"></div>
-        <div class="content">In Transit from sorting facility ({{ shipment.location }}).</div>
-      </div>
-
-      <div class="timeline-item created">
-        <div class="dot"></div>
-        <div class="content">Shipment label created and handed over to courier.</div>
-      </div>
     </div>
   </ng-container>
 
   <ng-template #notFound>
-    <div class="error-message">
-      <h2>Tracking ID Not Found 😞</h2>
-      <p>The tracking ID entered is invalid or the shipment has not been registered yet.</p>
-      <p>Returning to the dashboard shortly...</p>
+    <div *ngIf="!isLoading && !error" class="empty-state">
+      <i class="fas fa-question-circle"></i> Tracking ID **{{ trackingId }}** not found.
     </div>
   </ng-template>
 
-  <button class="back-button" routerLink="/">← Back to Dashboard</button>
 </div>
