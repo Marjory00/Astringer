@@ -1,15 +1,20 @@
-// Astringer/frontend/src/app/header/header.component.ts (FINALIZED)
+// src/app/header/header.component.ts (NEW FILE)
 
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink],
+  imports: [
+    CommonModule,
+    RouterLink
+],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  // Logic is handled in the template and CSS
+  // 💥 FIX: Define the properties needed by the HTML template
+  appTitle = 'Astringer Logistics';
 }

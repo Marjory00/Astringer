@@ -13,8 +13,5 @@ export const routes: Routes = [
   { path: 'planning', component: PlanningComponent },
   { path: 'reporting', component: ReportingComponent },
   { path: 'settings', component: SettingsComponent },
-  // Default redirect
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  // Wildcard for 404/not found
-  // { path: '**', component: NotFoundComponent }
 ];

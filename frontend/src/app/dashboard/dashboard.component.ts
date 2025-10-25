@@ -1,124 +1,75 @@
-// src/app/dashboard/dashboard.component.ts (FINALIZED & ENHANCED)
+// src/app/dashboard/dashboard.component.ts
 
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CourierService, Shipment } from '../courier.service';
-import { Observable, finalize, catchError, of, timeout } from 'rxjs';
-import { StatusClassPipe } from '../status-class.pipe';
-// NOTE: Ensure your CourierService, Shipment model, and StatusClassPipe are defined and exported correctly.
+import { ShipmentService } from '../shipment.service';
+import { Shipment } from '../shipment.model';
+import { Observable, finalize, catchError, of, timeout, tap } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     RouterLink,
-    StatusClassPipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-navigateToTracking(arg0: string) {
-throw new Error('Method not implemented.');
-}
   shipments$!: Observable<Shipment[]>;
   isLoading: boolean = true;
   apiError: string | null = null;
 
-  @ViewChild('trackingInput') trackingInput!: ElementRef;
-
-  trackingForm!: FormGroup;
-
   constructor(
-    private courierService: CourierService,
-    private router: Router,
-    private fb: FormBuilder
+    private shipmentService: ShipmentService,
+    private router: Router
   ) { }
 
   ngOnInit() {
-    this.trackingForm = this.fb.group({
-      trackingId: ['', [
-        Validators.required,
-        Validators.pattern(/^AST\d{6}$/) // e.g., AST123456
-      ]]
-    });
-
     this.isLoading = true;
     this.apiError = null;
 
-    // Auto-transform input for better UX/validation
-    this.trackingForm.get('trackingId')?.valueChanges.subscribe(value => {
-      if (value && typeof value === 'string') {
-        const transformedValue = value.trim().toUpperCase();
-
-        if (value !== transformedValue) {
-          this.trackingForm.get('trackingId')?.setValue(transformedValue, { emitEvent: false });
-        }
-      }
-    });
-
-    this.shipments$ = this.courierService.getAllShipments().pipe(
-      // FIX: Add timeout to prevent infinite loading state
-      timeout(5000),
+    // Core Loading Logic
+    this.shipments$ = this.shipmentService.getAllShipments().pipe(
+      tap(() => {
+          // Stops loading on SUCCESS before finalize
+          this.isLoading = false;
+      }),
+      timeout(5000), // Timeout after 5 seconds
       finalize(() => {
-        this.isLoading = false; // FINALLY runs after timeout or successful response
+        // Ensures spinner stops regardless of success/error path
+        if (this.isLoading === true) {
+             this.isLoading = false;
+        }
       }),
       catchError(err => {
-        console.error('API Connection Error:', err);
+        console.error('API Error:', err);
 
-        // FIX: Check for the actual TimeoutError name
         if (err.name === 'TimeoutError') {
-          this.apiError = 'Connection timed out (5s limit reached). The server may be unreachable or running slow.';
+            this.apiError = 'Connection timed out. The backend server might be off.';
         } else {
-          this.apiError = 'Could not connect to the logistics server. Please ensure the backend is running.';
+            this.apiError = 'Could not fetch shipments. Check backend connection.';
         }
-        return of([]); // Return an empty array to prevent application crash
+
+        this.isLoading = false;
+        return of([]); // Return an empty array to prevent app crash
       })
     );
   }
 
-  // ✨ ENHANCEMENT: Logic for the Progress Bar (visual only)
-  getShipmentProgress(status: string): string {
-    switch (status.toLowerCase()) {
-      case 'created': return '10%';
-      case 'in transit': return '50%';
-      case 'out for delivery': return '85%';
-      case 'delivered': return '100%';
-      default: return '0%';
-    }
-  }
-
-  // ✨ FIX: Logic for Status Icons (Replaced Emojis with Font Awesome Icons)
   getStatusIcon(status: string): string {
-    switch (status.toLowerCase()) {
-      case 'created': return 'fas fa-box-open';
-      case 'in transit': return 'fas fa-shipping-fast';
-      case 'out for delivery': return 'fas fa-route';
-      case 'delivered': return 'fas fa-check-circle';
-      default: return 'fas fa-question-circle';
-    }
-  }
-
-  searchTrackingId() {
-    if (this.trackingForm.valid) {
-      const id = this.trackingForm.value.trackingId.trim().toUpperCase();
-      this.router.navigate(['/track', id]);
-      this.trackingForm.reset();
-    } else {
-      this.trackingForm.get('trackingId')?.markAsTouched();
-      console.warn('Invalid Tracking ID entered.');
-
-      if (this.trackingInput) {
-        this.trackingInput.nativeElement.focus();
+      switch (status.toLowerCase()) {
+        case 'created': return 'fa-box-open';
+        case 'in transit': return 'fa-shipping-fast';
+        case 'out for delivery': return 'fa-route';
+        case 'delivered': return 'fa-check-circle';
+        default: return 'fa-question-circle';
       }
-    }
   }
 
-  get trackingIdControl() {
-    return this.trackingForm.get('trackingId');
+  navigateToTracking(id: string) {
+      this.router.navigate(['/track', id]);
   }
 }

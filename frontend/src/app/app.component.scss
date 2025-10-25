@@ -1,17 +1,10 @@
-/* src/app/app.component.scss (FIXED STICKY FOOTER) */
+/* src/app/app.component.scss */
 
 $primary-color: #004d99;
 $accent-color: #ff9900;
 $background-color: #f4f7fa;
 
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: $background-color;
-    color: #333;
-}
-
-// 💥 CRITICAL FIX: Target the host element (<app-root>) for the layout 💥
+// Styles for the whole application root
 :host {
     display: flex;
     flex-direction: column;
@@ -48,6 +41,7 @@ body {
     width: 30px;
     height: 30px;
     margin-right: 10px;
+    flex-shrink: 0;
 }
 
 .nav-links a {
@@ -80,8 +74,6 @@ body {
     max-width: 1200px;
     margin: 30px auto;
     padding: 0 30px;
-
-    // CRITICAL FIX: Content area takes up all remaining space
     flex-grow: 1;
 }
 
@@ -94,7 +86,6 @@ body {
     font-size: 0.9em;
     text-align: center;
     border-top: 3px solid $accent-color;
-    margin-top: 50px;
 
     p {
         margin: 5px 0;

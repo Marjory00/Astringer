@@ -1,5 +1,25 @@
-<header>
-  <a routerLink="/" class="logo">Astringer Logistics</a>
+<header class="main-header">
+  <nav class="navbar">
+    <div class="logo">
+      <a routerLink="/dashboard" class="logo-link">
+        <img src="assets/truck-courier.jpg" alt="Astringer Logo" class="logo-icon">
+        {{ appTitle }}
+      </a>
+    </div>
 
-  <nav></nav>
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active" title="Dashboard">
+        <i class="fas fa-truck"></i> Dashboard
+      </a>
+      <a routerLink="/planning" routerLinkActive="active" title="Plan New Shipment">
+        <i class="fas fa-box-open"></i> New Shipment
+      </a>
+      <a routerLink="/reporting" routerLinkActive="active" title="Reporting">
+        <i class="fas fa-chart-line"></i> Reporting
+      </a>
+      <a routerLink="/settings" routerLinkActive="active" title="Settings">
+        <i class="fas fa-cog"></i> Settings
+      </a>
+    </div>
+  </nav>
 </header>

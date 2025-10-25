@@ -4,50 +4,76 @@ $primary-color: #004d99; // Deep Blue
 $accent-color: #ff9900; // Logistics Orange
 $text-color: #f7f7f7; // Light gray/off-white
 
-header {
+/* 1. Header Container and Navbar Layout */
+
+.main-header {
     background-color: $primary-color;
-    color: $text-color;
-    padding: 15px 30px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 999; /* Ensures header is above most content, below notifications */
+    padding: 15px 30px;
 }
 
-/* Logo/Title Link */
-.logo {
-    text-decoration: none;
-    color: $text-color;
-    font-size: 1.8em;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    transition: color 0.2s;
+/* 2. Logo/Title Area */
 
-    &:hover {
-        color: $accent-color;
+.logo {
+    display: flex;
+    align-items: center;
+
+    .logo-link { /* Link wraps the image and title */
+        color: $text-color;
+        text-decoration: none;
+        font-size: 1.5em; /* Matches previous logo font size */
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        transition: color 0.2s;
+
+        &:hover {
+            color: $accent-color;
+        }
     }
 }
 
-/* Navigation links (if any) - currently minimal for a tracking app */
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 20px;
+.logo-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    flex-shrink: 0;
 }
 
-nav a {
-    text-decoration: none;
-    color: $text-color;
-    font-weight: 500;
-    transition: color 0.2s;
-    font-size: 1em;
+/* 3. Navigation Links Area */
 
-    &:hover {
-        color: $accent-color;
+.nav-links a {
+    color: #c7d2e0;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+
+    .fas { /* Icon inside the link */
+        margin-right: 5px;
+    }
+
+    &:hover,
+    &.active {
+        background-color: darken($primary-color, 5%);
+        color: white;
+    }
+
+    &.active {
+        border-bottom: 3px solid $accent-color;
+        padding-bottom: 7px;
     }
 }
