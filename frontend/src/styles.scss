@@ -1,4 +1,4 @@
-/* src/styles.scss (FINALIZED & CLEANED) */
+/* src/styles.scss (FINALIZED & FIXED) */
 
 // 🎨 Design Tokens
 $primary-color: #004d99;   // Deep Blue
@@ -40,11 +40,11 @@ html, body {
   border-bottom: 1px solid #ddd;
 }
 
-// 🧱 Content Area
+// Content Area
 .content-area {
-  padding: 30px;
-  background-color: $background-color;
-  min-height: calc(100vh - 100px);
+    padding: 0; // MUST be padding: 0 here to allow the child to expand
+    background-color: $background-color;
+    min-height: calc(100vh - 100px);
 }
 
 // 🧾 Card Component

@@ -1,4 +1,4 @@
-/* src/app/app.component.scss (FINALIZED) */
+/* src/app/app.component.scss (FINALIZED & FIXED) */
 
 $primary-color: #004d99;
 $accent-color: #ff9900;
@@ -9,13 +9,13 @@ $background-color: #f4f7fa;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    width: 100%; /* 💥 FIX 1: Ensure the root container is full width */
+    width: 100%; /* Ensure the root container is full width */
     background-color: $background-color;
 }
 
 /* 1. Header and Navigation */
 .main-header {
-    width: 100%; /* 💥 FIX 2: Explicitly set the header element itself to full width */
+    width: 100%; /* Explicitly set the header element itself to full width */
     margin: 0; /* Reset margins */
     background-color: $primary-color;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -24,11 +24,10 @@ $background-color: #f4f7fa;
     z-index: 1000;
 }
 
-// 💥 FIX 3: This container's job is to center the content and apply horizontal padding,
-// but it must not be the cause of the width issue.
+// This container's job is to center the content and apply horizontal padding.
 .navbar {
     width: 100%; /* Ensure the inner container uses the full width of the header */
-    max-width: 1400px; /* Increased max-width for better desktop view */
+    max-width: 1400px; /* Base width for desktop content */
     margin: 0 auto; /* Centers the content */
     display: flex;
     justify-content: space-between;
@@ -76,13 +75,13 @@ $background-color: #f4f7fa;
     }
 }
 
-/* 2. Content Area */
+/* 2. Content Area - FINAL FIX APPLIED HERE */
 .content-area {
-    // Max width should be slightly less than the header's inner max-width for contrast
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 30px;
+    // REMOVE max-width and margin: auto to allow it to span the full width,
+    // let the inner components control their own centering/max-width.
+    padding: 30px 0; // Use only vertical padding
     flex-grow: 1;
+    width: 100%; // Ensure it uses the full horizontal space
 }
 
 
@@ -107,5 +106,12 @@ $background-color: #f4f7fa;
         &:hover {
             text-decoration: underline;
         }
+    }
+}
+
+/* Media Query (Optional, but good practice for full width behavior) */
+@media (max-width: 1400px) {
+    .content-area {
+        max-width: 100%; /* Allow content to stretch when the viewport is smaller than max-width */
     }
 }
