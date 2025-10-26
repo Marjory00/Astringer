@@ -1,4 +1,4 @@
-// src/app/shipment.model.ts (CONSOLIDATED & FINALIZED)
+// src/app/shipment.model.ts (FINAL FIX)
 
 // Export Status Type for use across components (e.g., dashboard, cards)
 export type ShipmentStatus = 'In Transit' | 'Delivered' | 'Out for Delivery' | 'Created' | 'Exception';
@@ -22,6 +22,10 @@ export interface Shipment {
     status: ShipmentStatus; // Using the exported type
 
     estimatedDelivery: string; // ISO date string
+
+    // 💡 FIX 1: Add the missing properties that were in the mock data
+    weight: number;
+    carrier: string;
 
     // The detailed timeline for the TrackDetailComponent
     trackingHistory: TrackingEvent[];

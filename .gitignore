@@ -1,13 +1,14 @@
 # ----------------------------------------------------------------------
-# 📦 Dependency Directories
+# 📦 Dependency Directories & Lock Files
 # ----------------------------------------------------------------------
 # Node modules are rebuilt locally; never commit them.
+/node_modules
 /backend/node_modules
 /frontend/node_modules
-/package-lock.json
+
+# Lock files (often duplicated or unwanted in certain setups)
 package-lock.json
 **/package-lock.json
-node_modules
 
 
 # ----------------------------------------------------------------------
@@ -21,33 +22,61 @@ lerna-debug.log*
 .eslintcache
 .yarn-integrity
 *.tgz
+*.log
+.coverage # Generic coverage folder if not /coverage
+
 
 # ----------------------------------------------------------------------
 # 🖥️ Build Artifacts and Compilation Output
 # ----------------------------------------------------------------------
-# Frontend build directory (Angular/React/Vue output)
-/frontend/dist
-# Common backend compilation outputs (e.g., TypeScript or Babel)
-/backend/build
-/backend/dist
-/backend/tmp
 /coverage
+/frontend/dist
+/frontend/build
+/backend/dist
+/backend/build
+/backend/tmp
+
+# TypeScript and Angular Specifics
+**/*.js          # Compiled JavaScript files
+**/*.map         # Source maps
+**/*.tsbuildinfo # TypeScript build cache
+
+# Python/Backend Specifics (if using Python/Flask)
+__pycache__
+*.pyc
+.ipynb_checkpoints
+.pytest_cache/
+
 
 # ----------------------------------------------------------------------
-# 🚨 SENSITIVE BACKEND FILES (Credentials, Keys, etc.)
+# 🚨 SENSITIVE DATA, SECRETS, and Environment Files (CRITICAL)
 # ----------------------------------------------------------------------
-# NEVER commit environment variables or secret files.
+# Local environment variables and configuration secrets
+.env
+.env.local
+.env.*
 /backend/.env
 /backend/.env.*
+
+# Configuration files containing actual keys (generic catch-all)
+secrets.json
+keys.json
 /backend/config/secrets.js
+
+# Database/Migration files (local development artifacts)
+*.sqlite
+*.db
+/backend/migrations/
+
 
 # ----------------------------------------------------------------------
 # 🍏 OS and IDE Files
 # ----------------------------------------------------------------------
 .DS_Store             # macOS
 Thumbs.db             # Windows
-*.swp                 # Vim temporary files
 
-# IDE Files (VS Code, WebStorm, etc.)
+# IDE/Editor Files
 .vscode/              # VS Code settings
 .idea/                # IntelliJ/WebStorm settings
+*.swp                 # Vim temporary files
+*~                    # Generic temporary files (e.g., Emacs)

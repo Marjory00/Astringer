@@ -22,7 +22,7 @@ export interface SystemHealth {
   imports: [
     CommonModule,
     RouterLink,
-    StatusClassPipe
+
 ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']

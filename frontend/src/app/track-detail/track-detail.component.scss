@@ -15,14 +15,14 @@ $success-color: #4CAF50; // Using a single success color for consistency
    1. Main Layout & Info Blocks
    ========================================================= */
 
-// 💥 FIX 1: Using the selector that matches the final HTML root container
+// FIX 1: Using the selector that matches the final HTML root container
 .track-detail-container {
     max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
 }
 
-// 💥 FIX 2: Renaming to match the container for the H1 and Back Button
+// FIX 2: Renaming to match the container for the H1 and Back Button
 .page-header-row {
     display: flex;
     justify-content: space-between;
@@ -56,7 +56,7 @@ $success-color: #4CAF50; // Using a single success color for consistency
     }
 }
 
-/* 💥 FIX 3: Removed redundant .tracking-header-actions and .tracking-header styles */
+/* FIX 3: Removed redundant .tracking-header-actions and .tracking-header styles */
 
 .copy-button {
     background-color: $accent-color;
@@ -107,7 +107,7 @@ $success-color: #4CAF50; // Using a single success color for consistency
 }
 
 .route-card {
-    // 💥 FIX 4: Use the correct class from the finalized HTML
+    // FIX 4: Use the correct class from the finalized HTML
     .route-info-detail {
         display: flex;
         align-items: center;
@@ -174,7 +174,7 @@ $success-color: #4CAF50; // Using a single success color for consistency
     }
 }
 
-// 💥 FIX 5: Renamed .timeline-event to .timeline-item to match the HTML
+// FIX 5: Renamed .timeline-event to .timeline-item to match the HTML
 .timeline-item {
     position: relative;
     margin-bottom: 30px;

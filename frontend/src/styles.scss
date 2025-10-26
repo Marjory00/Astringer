@@ -1,12 +1,22 @@
-/* src/styles.scss (FINALIZED & FIXED) */
+/* src/styles.scss (FINALIZED & FIXED ORDER) */
 
-// 🎨 Design Tokens
+// 1. DESIGN TOKENS (MUST BE AT THE TOP)
+// ----------------------------------------------------------------------
 $primary-color: #004d99;   // Deep Blue
 $accent-color: #ff9900;    // Logistics Orange
 $background-color: #eef2f6;
 $font-stack: 'Roboto', 'Helvetica Neue', sans-serif;
 
-// 💥 FIX A: Guarantee full-width layout
+
+// 2. EXTERNAL LIBRARIES
+// ----------------------------------------------------------------------
+// FIX: Using the tilde (~) prefix to correctly resolve the path inside node_modules
+@import '../node_modules/leaflet/dist/leaflet.css';
+
+
+// 3. GLOBAL BASE STYLES
+// ----------------------------------------------------------------------
+// Full-width layout
 html, body {
   width: 100%;
   margin: 0;
@@ -21,10 +31,9 @@ html, body {
   box-sizing: inherit;
 }
 
-// 📦 FontAwesome Icons: The @import line was REMOVED.
-// FontAwesome is now loaded globally via 'angular.json'.
+// FontAwesome Icons: Loaded globally via 'angular.json'.
 
-// 📐 Layout Containers (These global styles are superseded by component-specific styles)
+// Layout Containers
 .main-header {
   width: 100%;
 }
@@ -42,12 +51,12 @@ html, body {
 
 // Content Area
 .content-area {
-    padding: 0; // MUST be padding: 0 here to allow the child to expand
+    padding: 0;
     background-color: $background-color;
     min-height: calc(100vh - 100px);
 }
 
-// 🧾 Card Component
+// Card Component
 .info-card {
   background: white;
   border-radius: 8px;
