@@ -4,6 +4,10 @@
 # Node modules are rebuilt locally; never commit them.
 /backend/node_modules
 /frontend/node_modules
+/package-lock.json
+package-lock.json
+**/package-lock.json
+
 
 # ----------------------------------------------------------------------
 # 📄 Logs, History, and Temporary Files
