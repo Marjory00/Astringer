@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router'; // <<-- RouterLink removed from import
 import { ShipmentService } from '../core/services/shipment.service';
 
-import { Shipment, TrackingEvent } from '../shipment.model';
+import { Shipment, TrackingEvent } from '../../../../backend/src/models/shipment.model';
 import { NotificationService } from '../core/services/notification.service';
 import { Observable, of, switchMap, catchError, tap } from 'rxjs';
 import * as L from 'leaflet';

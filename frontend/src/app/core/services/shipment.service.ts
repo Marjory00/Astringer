@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
-import { Shipment } from '../../shipment.model';
+import { Shipment } from '../../../../../backend/src/models/shipment.model';
 import { MOCK_SHIPMENTS } from '../../data/mock-shipments';
 
 @Injectable({

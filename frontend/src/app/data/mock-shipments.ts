@@ -1,6 +1,6 @@
 // src/app/mock-shipments.ts (FINALIZED AND TYPE-CORRECTED)
 
-import { Shipment, TrackingEvent } from '../shipment.model'; // ✨ FIX: Imported TrackingEvent for completeness
+import { Shipment, TrackingEvent } from '../../../../backend/src/models/shipment.model'; // ✨ FIX: Imported TrackingEvent for completeness
 
 // Helper function to get an ISO string date offset by days or hours
 const getIsoDateOffset = (days: number = 0, hours: number = 0): string => {
