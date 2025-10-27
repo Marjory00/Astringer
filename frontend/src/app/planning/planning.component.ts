@@ -1,25 +1,38 @@
-// src/app/planning/planning.component.ts
+// src/app/planning/planning.component.ts (TYPE-SAFE ENHANCEMENT)
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// 💥 FIX: Importing FormBuilder, FormGroup, Validators, and ReactiveFormsModule
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+
+// Define a TypeScript interface for the form structure for strong typing
+interface ShipmentFormValue {
+  origin: string;
+  destination: string;
+  weight: number | null;
+  dimensions: {
+    length: number | null;
+    width: number | null;
+    height: number | null;
+  };
+  carrier: string;
+  specialInstructions: string;
+}
 
 @Component({
   selector: 'app-planning',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule // 💥 FIX: Added ReactiveFormsModule
+    ReactiveFormsModule
   ],
   templateUrl: './planning.component.html',
-  // 💥 FIX: Changed styleUrl to styleUrls (must be an array)
   styleUrls: ['./planning.component.scss']
 })
-export class PlanningComponent implements OnInit { // 💥 FIX: Added OnInit interface
+export class PlanningComponent implements OnInit {
 
-  shipmentForm!: FormGroup; // 💥 FIX: Added FormGroup initialization
+  // ✨ ENHANCEMENT: Typed FormGroup using the defined interface
+  shipmentForm!: FormGroup<ShipmentFormValue>;
   isLoading: boolean = false;
 
   // Mock data for dropdowns
@@ -28,28 +41,31 @@ export class PlanningComponent implements OnInit { // 💥 FIX: Added OnInit int
   carriers = ['Astringer Fleet', 'FedEx', 'UPS', 'DHL'];
 
   constructor(
-    private fb: FormBuilder, // 💥 FIX: Injecting FormBuilder
-    private router: Router // 💥 FIX: Injecting Router
+    private fb: FormBuilder,
+    private router: Router
   ) { }
 
-  ngOnInit() { // 💥 FIX: Implemented ngOnInit for form initialization
-    this.shipmentForm = this.fb.group({
-      origin: ['', Validators.required],
-      destination: ['', Validators.required],
-      weight: [null, [Validators.required, Validators.min(1)]],
+  ngOnInit() {
+    // Using the type-safe group method
+    this.shipmentForm = this.fb.group<ShipmentFormValue>({
+      origin: this.fb.control('', { nonNullable: true, validators: [Validators.required] }),
+      destination: this.fb.control('', { nonNullable: true, validators: [Validators.required] }),
+      // Note: Using null as initial state for number inputs is common
+      weight: this.fb.control(null, { validators: [Validators.required, Validators.min(1)] }),
       dimensions: this.fb.group({
-        length: [null, [Validators.required, Validators.min(1)]],
-        width: [null, [Validators.required, Validators.min(1)]],
-        height: [null, [Validators.required, Validators.min(1)]]
+        length: this.fb.control(null, { validators: [Validators.required, Validators.min(1)] }),
+        width: this.fb.control(null, { validators: [Validators.required, Validators.min(1)] }),
+        height: this.fb.control(null, { validators: [Validators.required, Validators.min(1)] })
       }),
-      carrier: ['', Validators.required],
-      specialInstructions: ['']
+      carrier: this.fb.control('', { nonNullable: true, validators: [Validators.required] }),
+      specialInstructions: this.fb.control('', { nonNullable: true })
     });
   }
 
-  onSubmit() { // 💥 FIX: Added onSubmit logic
+  onSubmit() {
     if (this.shipmentForm.valid) {
       this.isLoading = true;
+      // The value here is now strongly typed as ShipmentFormValue
       const formData = this.shipmentForm.value;
 
       console.log('Shipment Data:', formData);

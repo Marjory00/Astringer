@@ -3,7 +3,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { ShipmentService } from '../shipment.service';
+import { ShipmentService } from '../core/services/shipment.service';
 import { Shipment } from '../shipment.model';
 import { Observable, finalize, catchError, of, timeout, tap } from 'rxjs';
 // Assuming StatusClassPipe is a custom pipe and has been created

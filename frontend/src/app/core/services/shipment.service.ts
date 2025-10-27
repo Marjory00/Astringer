@@ -1,10 +1,10 @@
-// src/app/shipment.service.ts (FINALIZED, Cast Fix)
+// src/app/shipment.service.ts (IMPROVED, Single Type Assertion)
 
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
-import { Shipment } from './shipment.model';
-import { MOCK_SHIPMENTS } from './mock-shipments';
+import { Shipment } from '../../shipment.model';
+import { MOCK_SHIPMENTS } from '../../data/mock-shipments';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +13,18 @@ export class ShipmentService {
 
   private readonly MOCK_LATENCY = 300;
 
+  // ✨ FIX/IMPROVEMENT: Store the MOCK_SHIPMENTS data as a strongly-typed private property.
+  // This ensures the type assertion is done only once, making method implementations cleaner.
+  private readonly shipments: Shipment[] = MOCK_SHIPMENTS as Shipment[];
+
   constructor() { }
 
   /**
    * Retrieves all shipments from the mock data.
    */
   getAllShipments(): Observable<Shipment[]> {
-    // 💥 FIX: Casting MOCK_SHIPMENTS as Shipment[] to satisfy compiler type checks across files
-    return of(MOCK_SHIPMENTS as Shipment[]).pipe(
+    // Now we use the strongly-typed 'this.shipments' property
+    return of(this.shipments).pipe(
       delay(this.MOCK_LATENCY)
     );
   }
@@ -29,8 +33,8 @@ export class ShipmentService {
    * Retrieves a single shipment by its ID or Tracking ID.
    */
   getShipmentById(id: string): Observable<Shipment> {
-    // Find operation on the explicitly typed array
-    const shipment = (MOCK_SHIPMENTS as Shipment[]).find(
+    // Use the clean, strongly-typed property
+    const shipment = this.shipments.find(
       s => s.id === id || s.trackingId === id
     );
 
@@ -40,7 +44,7 @@ export class ShipmentService {
         if (!result) {
           return throwError(() => new Error(`Shipment with ID ${id} not found.`));
         }
-        return of(result); // result is guaranteed to be Shipment here
+        return of(result);
       })
     );
   }
@@ -54,7 +58,8 @@ export class ShipmentService {
       return this.getAllShipments();
     }
 
-    const filtered = (MOCK_SHIPMENTS as Shipment[]).filter(s =>
+    // Use the clean, strongly-typed property
+    const filtered = this.shipments.filter(s =>
       s.trackingId.toLowerCase().includes(term) ||
       s.destination.toLowerCase().includes(term)
     );

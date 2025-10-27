@@ -4,10 +4,10 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ActivatedRoute, Router } from '@angular/router'; // <<-- RouterLink removed from import
-import { ShipmentService } from '../shipment.service';
+import { ShipmentService } from '../core/services/shipment.service';
 
 import { Shipment, TrackingEvent } from '../shipment.model';
-import { NotificationService } from '../notification.service';
+import { NotificationService } from '../core/services/notification.service';
 import { Observable, of, switchMap, catchError, tap } from 'rxjs';
 import * as L from 'leaflet';
 
