@@ -82,6 +82,7 @@ Thumbs.db             # Windows
 !.vscode/tasks.json      # KEEP: Shared build tasks
 !.vscode/launch.json     # KEEP: Shared debug configurations
 
+/frontend/.vscode/
 # Ignore all temporary/private VS Code files
 .vscode/*.log
 .vscode/storage/
