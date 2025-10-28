@@ -1,43 +1,52 @@
-// src/app/shipment.model.ts (FIXED AND CLEANED)
+// backend/src/models/shipment.model.ts 
+// (Used by Express/Mongoose/Sequelize for data structure definition)
 
-// 1. Export Status Type for use across components (e.g., dashboard, cards)
+// 1. Export Status Type
 export type ShipmentStatus = 'In Transit' | 'Delivered' | 'Out for Delivery' | 'Created' | 'Exception';
 
 // ---
-// 2. TrackingEvent Interface (The history detail)
+// 2. TrackingEvent Interface
+// This should match the structure used when recording events in the database.
 export interface TrackingEvent {
   status: string;
   location: string;
   timestamp: string; // ISO date string
-  isComplete: boolean; // For visual timeline completion status
+  isComplete: boolean; 
 }
 
 // ---
-// 3. New Interface for Route Capacity
-// ✨ FIX: This interface must be defined at the top level, not inside Shipment.
+// 3. RouteCapacity Interface
+// Useful if your backend needs a typed structure for capacity records.
 export interface RouteCapacity {
   date: string; // YYYY-MM-DD
-  availableCapacity: number; // e.g. totals tons/TEUs available
-  bookedVolume: number; // e.g., total tons/TEUs booked
+  availableCapacity: number;
+  bookedVolume: number;
 }
 
 // ---
 // 4. Shipment Interface (The main entity)
 export interface Shipment {
+    // Core IDs
     id: string;
     trackingId: string;
+
+    // Primary Fields (often indexed or required)
     origin: string;
     destination: string;
-
-    // Summary status for display in the dashboard/summary cards
-    status: ShipmentStatus; // Using the exported type
-
-    estimatedDelivery: string; // ISO date string
-
-    // 💡 FIX: Including necessary properties from mock data and general application use
     weight: number;
     carrier: string;
 
-    // The detailed timeline for the TrackDetailComponent
+    // Status & Dates
+    status: ShipmentStatus;
+    estimatedDelivery: string; // ISO date string
+    
+    // Optional/Nullable field from the Planning Form
+    specialInstructions?: string; 
+
+    // History
     trackingHistory: TrackingEvent[];
+
+    // Additional backend-managed fields (e.g., timestamps)
+    // createdAt?: Date; 
+    // updatedAt?: Date;
 }

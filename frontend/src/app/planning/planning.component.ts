@@ -1,40 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  FormBuilder,
-  FormGroup,
-  Validators,
   ReactiveFormsModule,
-  AbstractControl,
   NonNullableFormBuilder,
-  FormControl
+  FormGroup,
+  FormControl,
+  Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ShipmentService } from '../core/services/shipment.service';
+import { Shipment, ShipmentFormValue } from '../core/models/shipment.model';
 
-// 1. Define the form value interface
-interface ShipmentFormValue {
-  origin: string;
-  destination: string;
-  weight: number | null;
-  dimensions: {
-    length: number | null;
-    width: number | null;
-    height: number | null;
-  };
-  carrier: string;
-  specialInstructions: string;
-}
+// Type-safe form structure
+type DimensionsGroup = {
+  length: FormControl<number | null>;
+  width: FormControl<number | null>;
+  height: FormControl<number | null>;
+};
 
-// 2. Define the form structure interface
 type ShipmentFormStructure = {
   origin: FormControl<string>;
   destination: FormControl<string>;
   weight: FormControl<number | null>;
-  dimensions: FormGroup<{
-    length: FormControl<number | null>;
-    width: FormControl<number | null>;
-    height: FormControl<number | null>;
-  }>;
+  dimensions: FormGroup<DimensionsGroup>;
   carrier: FormControl<string>;
   specialInstructions: FormControl<string>;
 };
@@ -56,7 +44,8 @@ export class PlanningComponent implements OnInit {
 
   constructor(
     private fb: NonNullableFormBuilder,
-    private router: Router
+    private router: Router,
+    private shipmentService: ShipmentService
   ) {}
 
   ngOnInit(): void {
@@ -64,7 +53,7 @@ export class PlanningComponent implements OnInit {
       origin: this.fb.control('', Validators.required),
       destination: this.fb.control('', Validators.required),
       weight: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)]),
-      dimensions: this.fb.group({
+      dimensions: this.fb.group<DimensionsGroup>({
         length: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)]),
         width: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)]),
         height: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)])
@@ -79,13 +68,21 @@ export class PlanningComponent implements OnInit {
       this.isLoading = true;
       const formData: ShipmentFormValue = this.shipmentForm.getRawValue();
 
-      console.log('Shipment Data:', formData);
+      console.log('Submitting Shipment Data:', formData);
 
-      setTimeout(() => {
-        this.isLoading = false;
-        alert('Shipment successfully planned! Tracking will begin shortly.');
-        this.router.navigate(['/dashboard']);
-      }, 2000);
+      this.shipmentService.createShipment(formData).subscribe({
+        next: (newShipment: Shipment) => {
+          console.log('Shipment created successfully:', newShipment.trackingId);
+          this.isLoading = false;
+          alert(`Shipment successfully planned! Tracking ID: ${newShipment.trackingId}`);
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          console.error('Error creating shipment:', err);
+          this.isLoading = false;
+          alert('Failed to plan shipment. Check server status or network connection.');
+        }
+      });
     } else {
       this.shipmentForm.markAllAsTouched();
     }
@@ -95,15 +92,7 @@ export class PlanningComponent implements OnInit {
     return this.shipmentForm.controls;
   }
 
-  get dimensionsGroup(): FormGroup<{
-    length: FormControl<number | null>;
-    width: FormControl<number | null>;
-    height: FormControl<number | null>;
-  }> {
-    return this.shipmentForm.get('dimensions') as FormGroup<{
-      length: FormControl<number | null>;
-      width: FormControl<number | null>;
-      height: FormControl<number | null>;
-    }>;
+  get dimensionsGroup(): FormGroup<DimensionsGroup> {
+    return this.shipmentForm.get('dimensions') as FormGroup<DimensionsGroup>;
   }
 }

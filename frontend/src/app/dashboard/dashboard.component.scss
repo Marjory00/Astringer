@@ -1,41 +1,40 @@
-/* src/app/dashboard/dashboard.component.scss (FINALIZED FIX) */
+/* src/app/dashboard/dashboard.component.scss (FULL & FINALIZED with Professional Enhancements) */
 
 $primary-color: #004d99; // Deep Blue
 $accent-color: #ff9900; // Logistics Orange
 $light-gray: #f4f7fa;
 $border-color: #e0e0e0;
+$dark-text: #333;
 
-/* New System Health Colors */
+/* System Health Colors */
 $operational: #4CAF50; // Green
 $degraded: #FFC107; // Yellow/Amber
 $offline: #F44336; // Red
 
-
+// --- Dashboard Layout ---
 .dashboard-container {
     padding: 20px;
-    /* --- FIX: REMOVED CARD LOOK FROM MAIN CONTAINER --- */
-    // background-color: white;
-    // border-radius: 8px;
-    // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    /* --------------------------------------------- */
     max-width: 1400px;
     margin: 20px auto;
     width: 95%;
 
-    h1 {
+    h1, h2 { /* Styling for main and sub-section headings */
         color: $primary-color;
         border-bottom: 2px solid $border-color;
         padding-bottom: 15px;
         margin-bottom: 20px;
         font-size: 1.8em;
+    }
+    h2 { /* Sub-section headings */
+        font-size: 1.5em;
+    }
 
-        .fas {
-            margin-right: 10px;
-        }
+    .fas {
+        margin-right: 10px;
     }
 }
 
-// Global Card Style (This is now ONLY used by the health-card below)
+// --- Global Card Style ---
 .info-card {
     background: white;
     border-radius: 8px;
@@ -49,8 +48,7 @@ $offline: #F44336; // Red
     }
 }
 
-/* 1. Loading and Error States (No change needed) */
-
+// --- Loading and Error States ---
 .loading-state, .error-state, .empty-state {
     padding: 20px;
     margin: 20px 0;
@@ -88,7 +86,6 @@ $offline: #F44336; // Red
     .plan-link {
         color: $accent-color;
         text-decoration: none;
-        margin-left: 10px;
         font-weight: 600;
 
         &:hover {
@@ -97,18 +94,16 @@ $offline: #F44336; // Red
     }
 }
 
-/* New System Health Grid Styling */
-
+// --- System Health Grid Styling ---
 .system-health-grid {
     display: grid;
-    /* This ensures the cards spread out responsively */
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
 }
 
 .health-card {
-    @extend .info-card; /* Use the global card style for individual health boxes */
+    @extend .info-card;
     text-align: center;
     padding: 15px;
     border-left: 5px solid;
@@ -155,9 +150,154 @@ $offline: #F44336; // Red
     .fas { color: $offline; }
 }
 
+// --- KPI Cards Styling (Including NEW Operational Metrics Styling) ---
 
-/* 2. Shipments Table Styling (No change needed) */
+// 💥 NEW: Operational KPI Card Colors
+.bg-kpi-success { background-color: #008080 !important; /* Teal */ }
+.bg-kpi-info { background-color: #6a5acd !important; /* Slate Blue */ }
+.bg-kpi-danger { background-color: #8b0000 !important; /* Dark Red */ }
 
+.operational-kpis-container {
+    .kpi-card {
+        padding: 1.5rem 1rem;
+    }
+    .kpi-value-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .kpi-value {
+            font-size: 2.8em;
+        }
+
+        .kpi-trend {
+            font-size: 1.5em;
+            margin-left: 10px;
+            position: relative; /* Keep trend icon visible */
+
+            // Override global font colors to match background contrast
+            &.text-success { color: #d4edda !important; }
+            &.text-danger { color: #f8d7da !important; }
+            &.text-secondary { color: #e9ecef !important; }
+        }
+    }
+    .kpi-icon {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 3.5em;
+        opacity: 0.2;
+    }
+}
+
+.kpi-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+
+    > .col-md-3 {
+        flex: 1 1 22%;
+        min-width: 200px;
+        padding: 0;
+    }
+}
+
+.kpi-card {
+    @extend .info-card;
+    height: 100%;
+    padding: 1.5rem;
+    color: white !important;
+    border: none;
+    text-align: center;
+
+    // Status color overrides for background
+    &.bg-success { background-color: #28a745 !important; }
+    &.bg-danger { background-color: $offline !important; }
+    &.bg-primary { background-color: $primary-color !important; }
+    &.bg-secondary { background-color: #6c757d !important; }
+    &.bg-info { background-color: #17a2b8 !important; }
+
+    .kpi-title {
+        font-size: 1em;
+        font-weight: 500;
+        margin-bottom: 10px;
+        opacity: 0.8;
+    }
+
+    .kpi-value {
+        font-size: 3em;
+        font-weight: 700;
+        line-height: 1;
+        margin: 0;
+    }
+}
+
+// --- Search Bar Styling ---
+.input-group {
+    max-width: 600px;
+    margin: 0 0 20px 0;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    overflow: hidden;
+
+    .input-group-text {
+        background-color: $light-gray;
+        color: $primary-color;
+        border: none;
+    }
+    .form-control {
+        border: none;
+        box-shadow: none;
+        font-size: 1em;
+        padding: 10px 15px;
+        height: auto;
+    }
+}
+
+// --- 💥 NEW: Map and Hotspots Styling ---
+.map-placeholder {
+    background-color: #e0f2f1; /* Light cyan background for the map area */
+    border: 1px solid #b2dfdb;
+    border-radius: 8px;
+    height: 350px; /* Fixed height for visual consistency */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #004d40; /* Dark teal text */
+    margin-bottom: 20px;
+
+    p {
+        margin: 5px 0;
+        font-size: 1.1em;
+    }
+}
+
+.hotspot-list {
+    @extend .info-card;
+    padding: 20px;
+
+    .hotspot-item p {
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin: 0;
+        font-size: 0.95em;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .badge {
+            margin-left: 10px;
+            font-size: 0.8em;
+        }
+    }
+}
+
+
+// --- Shipments Table Styling ---
 .shipments-table-container {
     overflow-x: auto;
 }
@@ -203,8 +343,7 @@ tbody {
     }
 }
 
-/* 3. Status Badges and Colors (No change needed) */
-
+// Status Badges and Colors
 .status {
     padding: 4px 8px;
     border-radius: 4px;
@@ -216,27 +355,54 @@ tbody {
         margin-right: 5px;
     }
 
-    // Status color classes (based on lowercase shipment status)
-    &.created {
-        background-color: #fce4ec;
-        color: #c2185b;
+    &.created { background-color: #fce4ec; color: #c2185b; }
+    &.in.transit { background-color: #ffe0b2; color: #ef6c00; }
+    &.out.for.delivery { background-color: #c8e6c9; color: #388e3c; }
+    &.delivered { background-color: #bbdefb; color: #1976d2; }
+    &.exception { background-color: #fce4e4; color: $offline; }
+}
+
+// --- Recent Activity Log Styling ---
+.list-group {
+    @extend .info-card; /* Use info-card for a clean container */
+    padding: 10px 0;
+}
+
+.list-group-item {
+    padding: 12px 20px;
+    border: none;
+    border-bottom: 1px solid $border-color;
+    background-color: white;
+
+    &:last-child {
+        border-bottom: none;
     }
-    &.in.transit {
-        background-color: #ffe0b2;
-        color: #ef6c00;
+
+    .fw-bold {
+        font-weight: 600;
+        color: $dark-text;
+
+        .fas {
+            color: $accent-color;
+            margin-right: 8px;
+        }
     }
-    &.out.for.delivery {
-        background-color: #c8e6c9;
-        color: #388e3c;
+
+    small {
+        color: #777;
+        display: block;
+        margin-left: 25px;
     }
-    &.delivered {
-        background-color: #bbdefb;
-        color: #1976d2;
+
+    .badge {
+        background-color: #ccc !important;
+        color: #555 !important;
+        font-weight: 400;
     }
 }
 
-/* 4. Action Buttons (No change needed) */
 
+// --- Action Buttons ---
 .dashboard-actions {
     text-align: right;
     margin-top: 20px;
@@ -278,7 +444,7 @@ tbody {
     }
 }
 
-/* Keyframe for Loading Spinner (No change needed) */
+// Keyframe for Loading Spinner
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
