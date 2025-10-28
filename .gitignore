@@ -70,13 +70,24 @@ keys.json
 
 
 # ----------------------------------------------------------------------
-# 🍏 OS and IDE Files
+# 🍏 OS and IDE Files (VS Code Rules Enhanced)
 # ----------------------------------------------------------------------
 .DS_Store             # macOS
 Thumbs.db             # Windows
 
-# IDE/Editor Files
-.vscode/              # VS Code settings
+# --- VS Code Specifics (Allowing essential configs) ---
+.vscode/              # Ignores the entire folder first
+!.vscode/extensions.json # KEEP: Recommended extensions for team
+!.vscode/settings.json   # KEEP: Recommended workspace settings
+!.vscode/tasks.json      # KEEP: Shared build tasks
+!.vscode/launch.json     # KEEP: Shared debug configurations
+
+# Ignore all temporary/private VS Code files
+.vscode/*.log
+.vscode/storage/
+.vscode/*.code-workspace
+# -----------------------------------------------------
+
 .idea/                # IntelliJ/WebStorm settings
 *.swp                 # Vim temporary files
 *~                    # Generic temporary files (e.g., Emacs)
