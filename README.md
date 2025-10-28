@@ -53,9 +53,9 @@ The core use case for Astringer is to provide employees with instant, high-level
 
 The project uses a common **monorepo** structure to keep the frontend and backend logically separated but within the same Git repository.
 
-
+```
 Astringer/ ├── backend/ # Node.js/Express API (Sensitive data lives here) │ ├── node_modules/ # 🔒 Protected by .gitignore │ ├── package.json │ └── server.js # Main Express server and API routes ├── frontend/ # Angular Application │ ├── src/ │ │ ├── app/ │ │ │ ├── app.component.* │ │ │ ├── dashboard/ # New component with enhanced features │ │ │ └── core/services/shipment.service.ts # Handles communication with the backend │ │ └── ... # Other Angular files │ └── angular.json ├── .gitignore # Protects node_modules, build artifacts, and local secrets └── README.md
-
+```
 
 ***
 
