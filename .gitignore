@@ -85,7 +85,7 @@ Thumbs.db             # Windows
 # Other 
 /frontend/.vscode/
 .angular/cache/20.3.6/Astringer
-
+/frontend/.angular/cache/
 
 # Ignore all temporary/private VS Code files
 .vscode/*.log
