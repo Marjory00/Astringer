@@ -1,28 +1,29 @@
-// Astringer/backend/server.js
+// Astringer/backend/server.js (Consolidated Search Logic)
 
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors'); // Required for cross-origin communication
+const cors = require('cors'); 
 
 const app = express();
 const port = 3000; 
-const frontendUrl = 'http://localhost:4200'; // Angular's default dev server URL
+const frontendUrl = 'http://localhost:4200';
 
 // Middleware
 app.use(cors({
     origin: frontendUrl // Allows only the Angular frontend to connect
 })); 
-app.use(bodyParser.json());
+app.use(express.json());
 
-// Dummy Courier Logistics Data
-const shipments = [
+// Dummy Courier Logistics Data (Data remains the same)
+let shipments = [
     { 
         id: '1', 
         trackingId: 'AST456789', 
         origin: 'New York, NY', 
         destination: 'Seattle, WA',
         status: 'In Transit', 
-        estimatedDelivery: '2025-10-25T00:00:00.000Z' // Using ISO date string for safety
+        estimatedDelivery: '2025-11-05T00:00:00.000Z', 
+        weight: 15.5,
+        carrier: 'Astringer Fleet'
     },
     { 
         id: '2',
@@ -30,7 +31,9 @@ const shipments = [
         origin: 'Miami, FL', 
         destination: 'Los Angeles, CA',
         status: 'Delivered', 
-        estimatedDelivery: '2025-10-20T00:00:00.000Z' 
+        estimatedDelivery: '2025-10-20T00:00:00.000Z',
+        weight: 8.2,
+        carrier: 'Pioneer Freight'
     },
     { 
         id: '3',
@@ -38,7 +41,9 @@ const shipments = [
         origin: 'Dallas, TX', 
         destination: 'Chicago, IL',
         status: 'Out for Delivery', 
-        estimatedDelivery: '2025-10-22T00:00:00.000Z' 
+        estimatedDelivery: '2025-10-22T00:00:00.000Z',
+        weight: 22.0,
+        carrier: 'Astringer Fleet'
     }
 ];
 
@@ -46,18 +51,29 @@ const shipments = [
 // API ENDPOINTS
 // ------------------------------------------------------------------
 
-// 1. Get all shipments - Matches the frontend's getAllShipments() call
+// 1. GET all shipments / search shipments (Consolidated Endpoint)
 app.get('/api/shipments', (req, res) => {
-    // FIX: Simulate a 500ms delay to better test the frontend's loading spinner
+    const query = req.query.q ? req.query.q.toLowerCase() : '';
+    let resultShipments = shipments;
+    let latency = 500; // Default latency for fetching all
+
+    if (query) {
+        // 💥 FIX/CONSOLIDATION: Apply filtering if the 'q' query parameter is present
+        resultShipments = shipments.filter(s =>
+            s.trackingId.toLowerCase().includes(query) ||
+            s.destination.toLowerCase().includes(query)
+        );
+        latency = 300; // Shorter latency for search
+    }
+    
     setTimeout(() => {
-        res.status(200).json(shipments);
-    }, 500); 
+        res.status(200).json(resultShipments);
+    }, latency); 
 });
 
-// 2. Get single shipment by ID (used for /track/:id route)
+// 2. GET single shipment by ID or Tracking ID
 app.get('/api/shipments/:id', (req, res) => {
     const id = req.params.id;
-    // Search by the numerical 'id' property, or fallback to 'trackingId'
     const shipment = shipments.find(s => s.id === id || s.trackingId === id); 
 
     if (shipment) {
@@ -66,6 +82,33 @@ app.get('/api/shipments/:id', (req, res) => {
         res.status(404).json({ message: `Shipment with ID or Tracking ID ${id} not found.` });
     }
 });
+
+// 3. POST /api/shipments - Handles new shipment creation (from PlanningComponent)
+app.post('/api/shipments', (req, res) => {
+    setTimeout(() => {
+        const data = req.body;
+        
+        const newId = (shipments.length + 1).toString();
+        const newTrackingId = 'AST' + Math.floor(100000 + Math.random() * 900000);
+
+        const newShipment = {
+            id: newId,
+            trackingId: newTrackingId,
+            origin: data.origin,
+            destination: data.destination,
+            weight: data.weight,
+            carrier: data.carrier,
+            estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+            status: 'Created',
+        };
+
+        shipments.push(newShipment);
+        
+        res.status(201).json(newShipment);
+    }, 2000);
+});
+
+// FIX: Removed the separate /search endpoint as it is now handled by the root GET /api/shipments
 
 // Start the server
 app.listen(port, () => {
